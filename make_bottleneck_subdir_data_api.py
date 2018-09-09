@@ -299,18 +299,19 @@ def make_bottleneck_with_tf(dataset, shape):
 		# initialize the iterator on the training data
 		sess.run(train_init_op) # switch to train dataset
 		# initialize the iterator on the validation data
-
+		i = 0
 		# get each element of the training dataset until the end is reached
 		while True:
+			i += 1
 			try:
-				print('train batch')
+				print('train batch', i)
 				batch = sess.run(next_element)				
 				#img, label = elem
 				feature_vectors = bottleneck_tensor.eval(feed_dict={ x : batch[0] })
 				#label = elem[1]
 				images = list(map(list, feature_vectors))
 				labels = list(map(list, batch[1]))
-				print(labels)
+				#print(labels)
 				bottleneck_data['train']['images'] += images
 				bottleneck_data['train']['labels'] += labels
 				#print(label)				
@@ -320,14 +321,15 @@ def make_bottleneck_with_tf(dataset, shape):
 
 		sess.run(valid_init_op)
 		# get each element of the validation dataset until the end is reached
+		i = 0
 		while True:
+			i += 1
 			try:
-				print('valid batch')
+				print('valid batch', i)
 				elem = sess.run(next_element)
 				feature_vectors = bottleneck_tensor.eval(feed_dict={ x : batch[0] })
 				images = list(map(list, feature_vectors))
 				labels = list(map(list, batch[1]))
-				print(labels)
 				bottleneck_data['valid']['images'] += images
 				bottleneck_data['valid']['labels'] += labels								
 				#print(elem)
