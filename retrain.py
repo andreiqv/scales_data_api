@@ -180,7 +180,7 @@ if __name__ == '__main__':
 	print('valid size:', len(valid['labels']))
 	print('test size:', len(valid['labels']))
 	print('Data was loaded.')
-	print('Example of data:', train_data[0].shape)
+	print('Example of data:', train_data[0])
 	print('Example of label:',train_labels[0])
 	#sys.exit()
 
