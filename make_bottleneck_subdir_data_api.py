@@ -17,7 +17,9 @@ import math
 import numpy as np
 
 import tensorflow as tf
-from tensorflow.contrib.data import Dataset, Iterator
+#from tensorflow.contrib.data import Dataset, Iterator
+Dataset = tf.data.Dataset
+Iterator = tf.data.Iterator
 
 import network
 import split_data
