@@ -224,8 +224,7 @@ def make_tf_dataset(filenames_data):
 	valid_labels = tf.constant(filenames_data['valid']['labels'])
 	test_images = tf.constant(filenames_data['test']['filenames'])
 	test_labels = tf.constant(filenames_data['test']['labels'])
-
-	print(train_labels)
+	#print(train_labels)
 
 	# create TensorFlow Dataset objects
 	train_data = Dataset.from_tensor_slices((train_images, train_labels))
@@ -273,7 +272,6 @@ def make_bottleneck_with_tf(dataset, shape):
 	train_init_op = iterator.make_initializer(train_data)
 	valid_init_op = iterator.make_initializer(valid_data)
 
-
 	# 3) Calculate bottleneck in TF
 	height, width, color =  shape
 	#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
@@ -285,7 +283,6 @@ def make_bottleneck_with_tf(dataset, shape):
 	assert height, width == hub.get_expected_image_size(module)	
 	bottleneck_tensor = module(resized_input_tensor)  # Features with shape [batch_size, num_features]
 	print('bottleneck_tensor:', bottleneck_tensor)
-
 
 	bottleneck_data = dict()
 	bottleneck_data['train'] = {'images':[], 'labels':[]}
