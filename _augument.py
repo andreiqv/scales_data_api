@@ -45,3 +45,37 @@ def augment_dataset(dataset):
 	dataset.train_set = dataset.train_set.map(_random_distord)
 
 	return dataset
+
+
+
+class BulkImages:
+
+    def __init__(self, path_list, image_size) -> None:
+        self.path_list = path_list
+        self.image_size = image_size
+        self.load_images()
+        super().__init__()
+
+    def load_images(self):
+        image_paths = []
+        with open(self.path_list, "r") as pl:
+            for line in pl:
+                image_path = line.strip()
+                image_paths.append(image_path)
+
+        self.image_paths = np.array(image_paths)
+
+    def get_dataset(self):
+        dataset = tf.data.Dataset.from_tensor_slices(self.image_paths)
+        dataset = dataset.map(self._parse_function)
+        return dataset
+
+    def _parse_function(self, image_path):
+        image_string = tf.read_file(image_path)
+        image_decoded = tf.image.decode_jpeg(image_string)
+        image_resized = tf.image.resize_images(image_decoded, [self.image_size[1], self.image_size[0]],
+                                               method=tf.image.ResizeMethod.BICUBIC)
+        images = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
+
+        return images, image_path
+        # return Image.open(image_path).resize(self.image_size, Image.BICUBIC)	

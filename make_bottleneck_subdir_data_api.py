@@ -193,23 +193,32 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 def input_parser(image_path, label, num_classes):
 	# convert the label to one-hot encoding
 	#NUM_CLASSES = 11
+	input_height, input_width = SHAPE[0], SHAPE[1]
+
 	one_hot = tf.one_hot(label, num_classes)
 	#one_hot = tf.constant(np.array([1,2,3,4,5,6,7,8,9,10,11]))
 
 	# read the img from file
-	image_file = tf.read_file(image_path)
+	image_string = tf.read_file(image_path)
+	image_decoded = tf.image.decode_jpeg(image_string)
+	image_resized = tf.image.resize_images(image_decoded, [SHAPE[1], SHAPE[0]],
+                                               method=tf.image.ResizeMethod.BICUBIC)
+	image = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
+
+	"""
 	decoded_image = tf.image.decode_image(image_file, channels=3)
 	decoded_image_as_float = tf.image.convert_image_dtype(
 		decoded_image, tf.float32)
 	
 	decoded_image_4d = tf.expand_dims(decoded_image_as_float, 0)
-	input_height, input_width = SHAPE[0], SHAPE[1]
+
 	resize_shape = tf.stack([input_height, input_width])
 	resize_shape_as_int = tf.cast(resize_shape, dtype=tf.int32)
 	resized_image = tf.image.resize_bilinear(decoded_image_4d,
                                            resize_shape_as_int)
 
-	return resized_image, one_hot
+	"""
+	return image, one_hot
 
 
 def make_tf_dataset(filenames_data):
@@ -282,7 +291,7 @@ def make_bottleneck_with_tf(dataset, shape):
 	# 3) Calculate bottleneck in TF
 	height, width, color =  shape
 	#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
-	x = tf.placeholder(tf.float32, [None, 1, height, width, 3], name='Placeholder-x')
+	x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
 	resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 	#module = hub.Module("https://tfhub.dev/google/imagenet/resnet_v2_152/classification/1")		
 	
