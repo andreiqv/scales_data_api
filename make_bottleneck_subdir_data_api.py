@@ -434,4 +434,4 @@ if __name__ == '__main__':
 	print('Valid size:', len(bottleneck_data['valid']['images']))
 	print('Test size:', len(bottleneck_data['test']['images']))
 
-	#save_data_dump(bottleneck_data, dst_file=dst_file)
+	save_data_dump(bottleneck_data, dst_file=dst_file)

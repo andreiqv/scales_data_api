@@ -4,12 +4,12 @@ import tensorflow as tf
 def augment_dataset_2(dataset):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
-	dataset = dataset.repeat(5).shuffle(60000)
+	dataset = dataset.shuffle(60000).repeat(5)
 
 	def _random_distord(images, labels):
 
 		images = tf.image.random_flip_left_right(images)
-		
+
 		images = tf.image.random_hue(images, max_delta=0.05)
 		images = tf.image.random_contrast(images, lower=0.3, upper=1.8)
 		images = tf.image.random_brightness(images, max_delta=0.3)
