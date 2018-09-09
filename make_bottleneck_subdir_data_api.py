@@ -25,7 +25,7 @@ import network
 import split_data
 import distort
 
-DO_MIX = False
+DO_MIX = True
 NUM_CLASSES = 0
 
 if os.path.exists('.notebook'):
@@ -144,8 +144,11 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			ext = os.path.splitext(filename)[1]
 			if not ext in {'.jpg', ".png"} : continue			
 			class_index = map_id_label[class_id]
-			label = [0]*num_classes
-			label[class_index] = 1	
+			
+			label = class_index
+			#label = [0]*num_classes
+			#label[class_index] = 1
+
 			file_path = subdir + '/' + filename
 				
 			#im = Image.open(file_path)		
@@ -165,7 +168,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	print('Number of classes: {0}'.format(num_classes))	
 	print('Number of feature vectors: {0}'.format(len(feature_vectors)))	
 
-	data = {'images': feature_vectors, 'labels': labels, 'filenames':filenames}
+	data = {'images':feature_vectors, 'labels': labels, 'filenames':filenames}
 
 	# mix data	
 	if DO_MIX:
@@ -179,17 +182,20 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	print('Split data')
 	data = split_data.split_data(data, ratio=ratio)
+
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
-
-	NUM_CLASSES = num_classes
+	data['num_classes'] = num_classes
 
 	return data
 
 
-def input_parser(image_path, label):
+def input_parser(image_path, label, num_classes):
 	# convert the label to one-hot encoding
-	one_hot = tf.one_hot(label, NUM_CLASSES)
+	#NUM_CLASSES = 11
+	one_hot = tf.one_hot(label, num_classes)
+	#one_hot = tf.constant(np.array([1,2,3,4,5,6,7,8,9,10,11]))
+
 	# read the img from file
 	image_file = tf.read_file(image_path)
 	decoded_image = tf.image.decode_image(image_file, channels=3)
@@ -208,6 +214,8 @@ def input_parser(image_path, label):
 
 def make_tf_dataset(filenames_data):
 
+	print('Train labels:', filenames_data['train']['labels'])
+
 	# 
 	#print(filenames_data['train']['filenames'])
 	train_images = tf.constant(filenames_data['train']['filenames'])
@@ -216,6 +224,8 @@ def make_tf_dataset(filenames_data):
 	valid_labels = tf.constant(filenames_data['valid']['labels'])
 	test_images = tf.constant(filenames_data['test']['filenames'])
 	test_labels = tf.constant(filenames_data['test']['labels'])
+
+	print(train_labels)
 
 	# create TensorFlow Dataset objects
 	train_data = Dataset.from_tensor_slices((train_images, train_labels))
@@ -226,10 +236,12 @@ def make_tf_dataset(filenames_data):
 	print(test_data)
 
 	# load images and labels:
-	train_data = train_data.map(input_parser)
-	valid_data = valid_data.map(input_parser)
-	test_data  = test_data.map(input_parser)
-	
+	num_classes = filenames_data['num_classes']
+	input_parser_two_arg = lambda x,y : input_parser(x, y, num_classes)
+	train_data = train_data.map(input_parser_two_arg)
+	valid_data = valid_data.map(input_parser_two_arg)
+	test_data  = test_data.map(input_parser_two_arg)
+
 	#dataset = dataset.batch(batch_size)
 
 	if False: # Distrot train dataset
@@ -246,20 +258,26 @@ def make_bottleneck_with_tf(dataset, shape):
 	valid_data = dataset['valid']
 	test_data  = dataset['test']
 
+	batch_size = 16
+	train_data = train_data.batch(batch_size)
+	valid_data = valid_data.batch(batch_size)
+	test_data = test_data.batch(batch_size)
+
 	# create TensorFlow Iterator object
 	iterator = Iterator.from_structure(train_data.output_types,
 	                                   train_data.output_shapes)
-	next_element = iterator.get_next()
+	
+	next_element = iterator.get_next() #features, labels = iterator.get_next()
 
 	# create two initialization ops to switch between the datasets
-	training_init_op = iterator.make_initializer(train_data)
-	validation_init_op = iterator.make_initializer(valid_data)
+	train_init_op = iterator.make_initializer(train_data)
+	valid_init_op = iterator.make_initializer(valid_data)
 
 
 	# 3) Calculate bottleneck in TF
 	height, width, color =  shape
 	#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
-	x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
+	x = tf.placeholder(tf.float32, [None, 1, height, width, 3], name='Placeholder-x')
 	resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 	#module = hub.Module("https://tfhub.dev/google/imagenet/resnet_v2_152/classification/1")		
 	
@@ -269,33 +287,55 @@ def make_bottleneck_with_tf(dataset, shape):
 	print('bottleneck_tensor:', bottleneck_tensor)
 
 
+	bottleneck_data = dict()
+	bottleneck_data['train'] = {'images':[], 'labels':[]}
+	bottleneck_data['valid'] = {'images':[], 'labels':[]}
+	bottleneck_data['test'] =  {'images':[], 'labels':[]}
+
 	with tf.Session() as sess:
 
+		sess.run(tf.global_variables_initializer())
+
 		# initialize the iterator on the training data
-		sess.run(training_init_op)
+		sess.run(train_init_op) # switch to train dataset
 		# initialize the iterator on the validation data
-		sess.run(validation_init_op)
 
 		# get each element of the training dataset until the end is reached
 		while True:
 			try:
-				elem = sess.run(next_element)
-				print(elem[0][0])
-				feature_vector = bottleneck_tensor.eval(feed_dict={ x : elem[0] })
-
+				print('train batch')
+				batch = sess.run(next_element)				
+				#img, label = elem
+				feature_vectors = bottleneck_tensor.eval(feed_dict={ x : batch[0] })
+				#label = elem[1]
+				images = list(map(list, feature_vectors))
+				labels = list(map(list, batch[1]))
+				print(labels)
+				bottleneck_data['train']['images'] += images
+				bottleneck_data['train']['labels'] += labels
+				#print(label)				
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
 				break
 
+		sess.run(valid_init_op)
 		# get each element of the validation dataset until the end is reached
 		while True:
 			try:
+				print('valid batch')
 				elem = sess.run(next_element)
-				print(elem)
+				feature_vectors = bottleneck_tensor.eval(feed_dict={ x : batch[0] })
+				images = list(map(list, feature_vectors))
+				labels = list(map(list, batch[1]))
+				print(labels)
+				bottleneck_data['valid']['images'] += images
+				bottleneck_data['valid']['labels'] += labels								
+				#print(elem)
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
 				break
 
+	return bottleneck_data			
 
 	"""
 	# 3) Calculate bottleneck in TF
@@ -372,6 +412,8 @@ if __name__ == '__main__':
 
 	bottleneck_data = make_bottleneck_with_tf(dataset, shape=SHAPE)
 
-	
+	bottleneck_data['id_label'] = filenames_data['id_label']
+	bottleneck_data['label_id'] = filenames_data['label_id']
+	bottleneck_data['num_classes'] = filenames_data['num_classes']
 
-	#save_data_dump(bottleneck_data, dst_file=dst_file)
+	save_data_dump(bottleneck_data, dst_file=dst_file)
