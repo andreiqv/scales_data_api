@@ -207,7 +207,7 @@ def input_parser(image_path, label, num_classes):
 	resize_shape = tf.stack([input_height, input_width])
 	resize_shape_as_int = tf.cast(resize_shape, dtype=tf.int32)
 	resized_image = tf.image.resize_bilinear(decoded_image_4d,
-                                           resize_shape_as_int)	
+                                           resize_shape_as_int)
 
 	return resized_image, one_hot
 
@@ -215,6 +215,8 @@ def input_parser(image_path, label, num_classes):
 def make_tf_dataset(filenames_data):
 
 	print('Train labels:', filenames_data['train']['labels'])
+	print('Valid labels:', filenames_data['valid']['labels'])
+
 
 	# 
 	#print(filenames_data['train']['filenames'])
@@ -243,8 +245,14 @@ def make_tf_dataset(filenames_data):
 
 	#dataset = dataset.batch(batch_size)
 
-	if False: # Distrot train dataset
-		train_data = distort.augment_dataset(train_data)
+	if True: # Distrot train dataset
+		#train_data = distort.augment_dataset(train_data)
+		train_data = distort.augment_dataset_2(train_data)
+
+	batch_size = 16
+	train_data = train_data.batch(batch_size)
+	valid_data = valid_data.batch(batch_size)
+	test_data  = test_data.batch(batch_size)
 
 	dataset = {'train':train_data, 'valid':valid_data, 'test':test_data}	
 
@@ -256,11 +264,10 @@ def make_bottleneck_with_tf(dataset, shape):
 	train_data = dataset['train']
 	valid_data = dataset['valid']
 	test_data  = dataset['test']
+	print(train_data)
+	print(valid_data)
+	#sys.exit(0)
 
-	batch_size = 16
-	train_data = train_data.batch(batch_size)
-	valid_data = valid_data.batch(batch_size)
-	test_data = test_data.batch(batch_size)
 
 	# create TensorFlow Iterator object
 	iterator = Iterator.from_structure(train_data.output_types,
@@ -295,7 +302,6 @@ def make_bottleneck_with_tf(dataset, shape):
 
 		# initialize the iterator on the training data
 		sess.run(train_init_op) # switch to train dataset
-		# initialize the iterator on the validation data
 		i = 0
 		# get each element of the training dataset until the end is reached
 		while True:
@@ -308,14 +314,14 @@ def make_bottleneck_with_tf(dataset, shape):
 				#label = elem[1]
 				images = list(map(list, feature_vectors))
 				labels = list(map(list, batch[1]))
-				#print(labels)
 				bottleneck_data['train']['images'] += images
 				bottleneck_data['train']['labels'] += labels
-				#print(label)				
+				print(labels)
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
 				break
-
+			
+		# initialize the iterator on the validation data
 		sess.run(valid_init_op)
 		# get each element of the validation dataset until the end is reached
 		i = 0
@@ -329,9 +335,9 @@ def make_bottleneck_with_tf(dataset, shape):
 				labels = list(map(list, batch[1]))
 				bottleneck_data['valid']['images'] += images
 				bottleneck_data['valid']['labels'] += labels								
-				#print(elem)
+				print(labels)
 			except tf.errors.OutOfRangeError:
-				print("End of training dataset.")
+				print("End of validation dataset.")
 				break
 
 	return bottleneck_data			
@@ -415,4 +421,8 @@ if __name__ == '__main__':
 	bottleneck_data['label_id'] = filenames_data['label_id']
 	bottleneck_data['num_classes'] = filenames_data['num_classes']
 
-	save_data_dump(bottleneck_data, dst_file=dst_file)
+	print('Train size:', len(bottleneck_data['train']['images']))
+	print('Valid size:', len(bottleneck_data['valid']['images']))
+	print('Test size:', len(bottleneck_data['test']['images']))
+
+	#save_data_dump(bottleneck_data, dst_file=dst_file)

@@ -1,5 +1,28 @@
 import tensorflow as tf
 
+
+def augment_dataset_2(dataset):
+	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
+	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
+	dataset = dataset.repeat(5).shuffle(60000)
+
+	def _random_distord(images, labels):
+
+		images = tf.image.random_hue(images, max_delta=0.05)
+		images = tf.image.random_contrast(images, lower=0.3, upper=1.8)
+		images = tf.image.random_brightness(images, max_delta=0.3)
+		images = tf.image.random_saturation(images, lower=0.0, upper=2.0)
+
+		images = tf.minimum(images, 1.0)
+		images = tf.maximum(images, 0.0)
+
+		return images, labels
+
+	dataset = dataset.map(_random_distord)
+
+	return dataset
+
+
 def augment_dataset(dataset):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
