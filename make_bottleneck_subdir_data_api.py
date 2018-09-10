@@ -338,7 +338,7 @@ def make_bottleneck_with_tf(dataset, shape):
 			i += 1
 			try:
 				print('valid batch', i)
-				elem = sess.run(next_element)
+				batch = sess.run(next_element)
 				feature_vectors = bottleneck_tensor.eval(feed_dict={ x : batch[0] })
 				images = list(map(list, feature_vectors))
 				labels = list(map(list, batch[1]))
