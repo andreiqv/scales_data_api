@@ -329,7 +329,7 @@ def make_bottleneck_with_tf(dataset, shape):
 				labels = list(map(list, batch[1]))
 				bottleneck_data['train']['images'] += images
 				bottleneck_data['train']['labels'] += labels
-				print(labels)
+				#print(labels)
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
 				break
@@ -348,7 +348,7 @@ def make_bottleneck_with_tf(dataset, shape):
 				labels = list(map(list, batch[1]))
 				bottleneck_data['valid']['images'] += images
 				bottleneck_data['valid']['labels'] += labels								
-				print(labels)
+				#print(labels)
 			except tf.errors.OutOfRangeError:
 				print("End of validation dataset.")
 				break
