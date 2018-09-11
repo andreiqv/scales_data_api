@@ -35,7 +35,8 @@ if os.path.exists('.notebook'):
 	SHAPE = 224, 224, 3
 else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
-	data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
+	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
+	data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped/'
 	import tensorflow_hub as hub
 
 	model_number = 3
@@ -142,7 +143,10 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 			base = os.path.splitext(filename)[0]
 			ext = os.path.splitext(filename)[1]
-			if not ext in {'.jpg', ".png"} : continue			
+			if not ext in {'.jpg', ".png"} : continue
+
+			if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
+
 			class_index = map_id_label[class_id]
 			
 			label = class_index
@@ -193,7 +197,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 def input_parser(image_path, label, num_classes):
 	# convert the label to one-hot encoding
 	#NUM_CLASSES = 11
-	input_height, input_width = SHAPE[0], SHAPE[1]
+	#input_height, input_width = SHAPE[0], SHAPE[1]
 
 	one_hot = tf.one_hot(label, num_classes)
 	#one_hot = tf.constant(np.array([1,2,3,4,5,6,7,8,9,10,11]))
