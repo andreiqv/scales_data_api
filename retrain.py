@@ -26,6 +26,9 @@ import tensorflow as tf
 from layers import *
 
 HIDDEN_NUM = 8
+
+CHECKPOINT_NAME = 'my_test_model'
+
 #NUM_CLASSES = 412
 
 if os.path.exists('.notebook'):
@@ -122,6 +125,7 @@ def createParser ():
 	ArgumentParser
 	"""
 	parser = argparse.ArgumentParser()
+	parser.add_argument('-r', '--restore', dest='restore', action='store_true')
 	parser.add_argument('-i', '--in_file', default="dump.gz", type=str,\
 		help='input dir')
 	parser.add_argument('-k', '--k', default=2, type=int,\
@@ -250,6 +254,10 @@ if __name__ == '__main__':
 		with tf.Session() as sess:  # Connect to the TF runtime.
 			init = tf.global_variables_initializer()
 			sess.run(init)	# Randomly initialize weights.
+
+			if arguments.restore:
+				tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
+
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
 				"""
@@ -297,7 +305,9 @@ if __name__ == '__main__':
 					print('epoch {0:2} (i={1:06}): train={2:0.4f}, valid={3:0.4f} (max={4:0.4f}) [top5={5:0.4f}, top6={6:0.4f}]'.\
 						format(epoch, iteration, train_acc, valid_acc, min_valid_acc, valid_acc_top5, valid_acc_top6))
 
-					
+					if epoch % 50 == 0:	
+						saver = tf.train.Saver()		
+						saver.save(sess, './save_model/{0}_{1}'.format(CHECKPOINT_NAME, epoch))
 				
 				a1 = iteration*BATCH_SIZE % train['size']
 				a2 = (iteration + 1)*BATCH_SIZE % train['size']
@@ -332,8 +342,7 @@ if __name__ == '__main__':
 			print('test_loss={0:0.4f}'.format(test_loss))				
 			"""
 
-			"""
-			# Saver
+			# Saver			
 			saver = tf.train.Saver()		
-			saver.save(sess, './save_model/my_test_model')  
-			"""
+			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
+			
