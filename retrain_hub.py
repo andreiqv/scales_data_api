@@ -16,7 +16,7 @@
 # and modified to use TensorFlow Hub modules.
 
 # pylint: disable=line-too-long
-r"""Simple transfer learning with image modules from TensorFlow Hub.
+"""Simple transfer learning with image modules from TensorFlow Hub.
 
 This example shows how to train an image classifier based on any
 TensorFlow Hub module that computes image feature vectors. By default,
@@ -1095,9 +1095,9 @@ def main(_):
             [evaluation_step, cross_entropy],
             feed_dict={bottleneck_input: train_bottlenecks,
                        ground_truth_input: train_ground_truth})
-        tf.logging.info('%s: Step %d: Train accuracy = %.1f%%' %
+        tf.logging.debug('%s: Step %d: Train accuracy = %.1f%%' %
                         (datetime.now(), i, train_accuracy * 100))
-        tf.logging.info('%s: Step %d: Cross entropy = %f' %
+        tf.logging.debug('%s: Step %d: Cross entropy = %f' %
                         (datetime.now(), i, cross_entropy_value))
         # TODO: Make this use an eval graph, to avoid quantization
         # moving averages being updated by the validation set, though in
@@ -1115,9 +1115,13 @@ def main(_):
             feed_dict={bottleneck_input: validation_bottlenecks,
                        ground_truth_input: validation_ground_truth})
         validation_writer.add_summary(validation_summary, i)
-        tf.logging.info('%s: Step %d: Validation accuracy = %.1f%% (N=%d)' %
+        tf.logging.debug('%s: Step %d: Validation accuracy = %.1f%% (N=%d)' %
                         (datetime.now(), i, validation_accuracy * 100,
                          len(validation_bottlenecks)))
+        
+        print('Step {}: entropy={}, train={}, valid={} (N={})'.format(i,
+          cross_entropy_value, train_accuracy * 100, 
+          validation_accuracy*100, len(validation_bottlenecks)))
 
       # Store intermediate results
       intermediate_frequency = FLAGS.intermediate_store_frequency
