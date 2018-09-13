@@ -342,7 +342,9 @@ def dataset_preprocessing(data_dir):
 		
 		files = os.listdir(subdir)
 		num = len(files)
-		if num < 1: continue
+		if num < 1: 
+			os.system('rmdir {}'.format(subdir))
+			continue
 
 		min_num = MIN_NUM_IMAGES		
 		if num < min_num:
