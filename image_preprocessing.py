@@ -28,7 +28,7 @@ import distort
 DO_MIX = True
 NUM_CLASSES = 0
 
-MIN_NUM_IMAGES = 5
+MIN_NUM_IMAGES = 40
 DO_RESIZE = False
 
 if os.path.exists('.notebook'):
@@ -39,7 +39,7 @@ if os.path.exists('.notebook'):
 else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
-	data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped/'
+	data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped_mult'
 	import tensorflow_hub as hub
 
 	model_number = 3
