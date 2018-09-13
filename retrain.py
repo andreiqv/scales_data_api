@@ -26,7 +26,6 @@ import tensorflow as tf
 from layers import *
 
 HIDDEN_NUM = 8
-
 CHECKPOINT_NAME = 'my_test_model'
 
 #NUM_CLASSES = 412
@@ -203,6 +202,7 @@ if __name__ == '__main__':
 
 	map_label_id = data['label_id']
 	NUM_CLASSES = len(map_label_id)
+	print('NUM_CLASSES =', NUM_CLASSES)
 
 	#-------------------
 
