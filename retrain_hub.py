@@ -1124,7 +1124,7 @@ def main(_):
           i, cross_entropy_value, train_accuracy * 100, 
           validation_accuracy*100, len(validation_bottlenecks))
         print(log_info)
-        os.system('cat {} >> _log_info.txt'.format(log_info))
+        os.system('echo "{}" >> _log_info.txt'.format(log_info))
 
 
       # Store intermediate results
