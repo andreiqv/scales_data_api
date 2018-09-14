@@ -123,6 +123,7 @@ import argparse
 import collections
 from datetime import datetime
 import hashlib
+import os
 import os.path
 import random
 import re
@@ -1119,9 +1120,12 @@ def main(_):
                         (datetime.now(), i, validation_accuracy * 100,
                          len(validation_bottlenecks)))
         
-        print('Step {0}: entropy={1:.3f}, train={2:.2f}%, valid={3:.2f}% (N={4})'.format(
+        log_info = 'Step {0}: entropy={1:.3f}, train={2:.2f}%, valid={3:.2f}% (N={4})'.format(
           i, cross_entropy_value, train_accuracy * 100, 
-          validation_accuracy*100, len(validation_bottlenecks)))
+          validation_accuracy*100, len(validation_bottlenecks))
+        print(log_info)
+        os.system('cat {} >> _log_info.txt'.format(log_info))
+
 
       # Store intermediate results
       intermediate_frequency = FLAGS.intermediate_store_frequency
