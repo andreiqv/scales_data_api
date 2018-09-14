@@ -1119,7 +1119,7 @@ def main(_):
                         (datetime.now(), i, validation_accuracy * 100,
                          len(validation_bottlenecks)))
         
-        print('Step {0}: entropy={1:.3f}, train={2:.2f}%, valid={3:.2f} (N={4})'.format(
+        print('Step {0}: entropy={1:.3f}, train={2:.2f}%, valid={3:.2f}% (N={4})'.format(
           i, cross_entropy_value, train_accuracy * 100, 
           validation_accuracy*100, len(validation_bottlenecks)))
 
