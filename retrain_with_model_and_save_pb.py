@@ -170,10 +170,11 @@ if __name__ == '__main__':
 		#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
 		x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')		
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
-		bottleneck_tensor = module(resized_input_tensor)
 
 		print('*************')
 		print(hub.Module._graph)
+
+		bottleneck_tensor = module(resized_input_tensor)
 
 		bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
