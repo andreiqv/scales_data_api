@@ -172,6 +172,9 @@ if __name__ == '__main__':
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 		bottleneck_tensor = module(resized_input_tensor)
 
+		print('*************')
+		print(module._graph)
+
 		bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
 		#x = tf.placeholder(tf.float32, [None, 1, bottleneck_tensor_size], name='Placeholder-x') # Placeholder for input.
