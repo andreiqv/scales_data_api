@@ -172,7 +172,7 @@ if __name__ == '__main__':
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 
 		print('*************')
-		print(hub.Module._graph)
+		print(module._graph)
 
 		bottleneck_tensor = module(resized_input_tensor)
 
