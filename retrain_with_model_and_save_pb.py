@@ -173,7 +173,7 @@ if __name__ == '__main__':
 		bottleneck_tensor = module(resized_input_tensor)
 
 		print('*************')
-		print(module._graph)
+		print(hub.Module._graph)
 
 		bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
@@ -211,7 +211,11 @@ if __name__ == '__main__':
 		acc_top6 = tf.nn.in_top_k(logits, tf.argmax(y,1), 6)
 
 
-		output_angles_valid = []
+		path_to_model_pb = '.'
+		tf.train.write_graph(graph, path_to_model_pb,
+			'saved_model.pb', as_text=False)		
+
+		#output_angles_valid = []
 
 		# 3. Execute the graph on batches of input data.
 		with tf.Session() as sess:  # Connect to the TF runtime.
@@ -292,6 +296,4 @@ if __name__ == '__main__':
 			saver = tf.train.Saver()		
 			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 	
-	path_to_model_pb = '.'
-	tf.train.write_graph(graph, path_to_model_pb,
-		'saved_model.pb', as_text=False)		
+	
