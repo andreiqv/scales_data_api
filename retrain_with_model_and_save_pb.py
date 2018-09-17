@@ -185,6 +185,8 @@ if __name__ == '__main__':
 		print('output =', output)	
 		logits = output
 
+		tf.contrib.quantize.create_training_graph()
+
 		y = tf.placeholder(tf.float32, [None, NUM_CLASSES], name='Placeholder-y')   # Placeholder for labels.		
 
 		# 2. Add nodes that represent the optimization algorithm.
