@@ -214,11 +214,6 @@ if __name__ == '__main__':
 		acc_top5 = tf.nn.in_top_k(logits, tf.argmax(y,1), 5)
 		acc_top6 = tf.nn.in_top_k(logits, tf.argmax(y,1), 6)
 
-
-		path_to_model_pb = '.'
-		tf.train.write_graph(graph, path_to_model_pb,
-			'saved_model.pb', as_text=False)		
-
 		#output_angles_valid = []
 
 		# 3. Execute the graph on batches of input data.
@@ -300,4 +295,6 @@ if __name__ == '__main__':
 			saver = tf.train.Saver()		
 			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 	
-	
+	path_to_model_pb = '.'
+	tf.train.write_graph(graph, path_to_model_pb,
+		'saved_model.pb', as_text=False)		
