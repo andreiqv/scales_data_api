@@ -9,7 +9,7 @@ if os.path.exists('.notebook'):
 	module = network.conv_network_224
 	SHAPE = 224, 224, 3
 
-	bottleneck_tensor_size =  588
+	bottleneck_tensor_size =  1536 #588
 	BATCH_SIZE = 2
 	DISPLAY_INTERVAL, NUM_ITERS = 1, 500	
 
@@ -40,4 +40,4 @@ else:
 	bottleneck_tensor_size =  1536
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 10
-	DISPLAY_INTERVAL, NUM_ITERS = 100, 20*1000*10		
+	DISPLAY_INTERVAL, NUM_ITERS = 100, 20*1000*10
