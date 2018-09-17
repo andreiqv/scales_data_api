@@ -172,8 +172,9 @@ if __name__ == '__main__':
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 
 		print('*************')
+		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1")
 		print(module._graph)
-
+	
 		bottleneck_tensor = module(resized_input_tensor)
 
 		bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
