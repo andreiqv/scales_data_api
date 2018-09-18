@@ -42,4 +42,4 @@ else:
 	bottleneck_tensor_size =  1536
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 32
-	DISPLAY_INTERVAL, NUM_ITERS = 100, 2000*1000
+	DISPLAY_INTERVAL, NUM_ITERS = 100, 1000*20

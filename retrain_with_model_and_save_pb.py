@@ -97,8 +97,10 @@ if __name__ == '__main__':
 
 	if arguments.k == 1:	
 		neural_network = network1
+		output_node_names = ['reluF1']
 	elif arguments.k == 2:	
 		neural_network = network2
+		output_node_names = ['reluF2']
 	else:
 		raise Exception('Bad argument arguments.k')
 
@@ -305,7 +307,7 @@ if __name__ == '__main__':
 			graph_file_name = 'saved_model_gf.pb'		
 			graph = sess.graph
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
-				sess, graph.as_graph_def(), ['reluF2'])
+				sess, graph.as_graph_def(), output_node_names)
 			
 			#with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
 			#	f.write(output_graph_def.SerilizeToString())
