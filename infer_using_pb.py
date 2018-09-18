@@ -1,12 +1,14 @@
-import tensorflow as tf
+import sys
 import os
+import argparse
+
+import tensorflow as tf
 import numpy as np
 from tensorflow.python.platform import gfile
 from PIL import Image
-import sys
 
 
-def inference(image_file):
+def inference(image_file, pb_file):
 
 	# Read the image & get statstics
 	image = Image.open(image_file)
@@ -34,10 +36,10 @@ def inference(image_file):
 		with tf.Session() as sess:
 
 			# Load the graph in graph_def
-			print("load graph")
+			print("session")
 
 			# We load the protobuf file from the disk and parse it to retrive the unserialized graph_drf
-			with gfile.FastGFile("output_graph.pb",'rb') as f:
+			with gfile.FastGFile(pb_file,'rb') as f:
 
 				#Set default graph as current graph
 				graph_def = tf.GraphDef()
@@ -45,9 +47,18 @@ def inference(image_file):
 				#sess.graph.as_default() #new line
 
 				# Import a graph_def into the current default Graph
-				input_, predictions =  tf.import_graph_def(graph_def, name='', 
-					return_elements=['Placeholder:0', 'final_result:0'])
+				use_hub_model = False
+				if use_hub_model:
+					input_output_placeholders = ['Placeholder:0', 'final_result:0']
+				else:
+					#input_output_placeholders = ['Placeholder-x:0', 'reluF2:0']
+					input_output_placeholders = ['Placeholder-x:0', 'Mean:0']
 
+				print("import graph")	
+				input_, predictions =  tf.import_graph_def(graph_def, name='', 
+					return_elements=input_output_placeholders)
+
+				print("predictions.eval")
 				p_val = predictions.eval(feed_dict={input_: [image_arr]})
 				index = np.argmax(p_val)
 				label = labels[index]
@@ -58,6 +69,23 @@ def inference(image_file):
 
 				return label
 
+
+def createParser ():
+	"""ArgumentParser
+	"""
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-i', '--input', default="images/100.jpg", type=str,\
+		help='input')
+	parser.add_argument('-pb', '--pb', default="saved_model.pb", type=str,\
+		help='input')
+	parser.add_argument('-o', '--output', default="logs/1/", type=str,\
+		help='output')
+	return parser
+
 if __name__ == '__main__':
 
-	label = inference('img120.jpg')
+	parser = createParser()
+	arguments = parser.parse_args(sys.argv[1:])			
+	#pb_file_name = 'saved_model.pb' # output_graph.pb
+	label = inference(arguments.input, arguments.pb)
+	print(label)

@@ -295,6 +295,6 @@ if __name__ == '__main__':
 			saver = tf.train.Saver()		
 			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 	
-	path_to_model_pb = '.'
-	tf.train.write_graph(graph, path_to_model_pb,
-		'saved_model.pb', as_text=False)		
+		path_to_model_pb = '.'
+		tf.train.write_graph(graph, path_to_model_pb,
+			'saved_model.pb', as_text=False)		
