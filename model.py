@@ -2,7 +2,7 @@ import os.path
 
 import network
 
-use_hub = not os.path.exists('.notebook')
+use_hub = os.path.exists('.use_hub')
 
 if not use_hub:
 	#data_dir = '../data'

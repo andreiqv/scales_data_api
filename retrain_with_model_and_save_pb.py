@@ -300,17 +300,21 @@ if __name__ == '__main__':
 	
 
 			# SAVE GRAPH TO PB
+			tf.contrib.quantize.create_eval_graph()
+			# tf.contrib.quantize.create_training_graph()
+
 			dir_for_model = '.'
 			#tf.train.write_graph(graph, dir_for_model,
 			#	'saved_model.pb', as_text=False)
 
-			graph_file_name = 'saved_model_gf.pb'		
 			graph = sess.graph
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
 				sess, graph.as_graph_def(), output_node_names)
-			
-			#with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
-			#	f.write(output_graph_def.SerilizeToString())
 
 			tf.train.write_graph(output_graph_def, dir_for_model,
 				'saved_model.pb', as_text=False)	
+
+			# it doesn't work. I don't know why.
+			#graph_file_name = 'saved_model_gf.pb'			
+			#with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
+			#	f.write(output_graph_def.SerilizeToString())
