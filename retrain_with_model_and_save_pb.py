@@ -272,7 +272,8 @@ if __name__ == '__main__':
 			# Save the comp. graph
 			if False:
 				print('Save the comp. graph')
-				x_data, y_data =  valid['images'], valid['labels'] #mnist.train.next_batch(BATCH_SIZE)		
+				x_data, y_data =  valid['images'], valid['labels'] 
+				#mnist.train.next_batch(BATCH_SIZE)		
 				writer = tf.summary.FileWriter("output", sess.graph)
 				#print(sess.run(train_op, {x: x_data, y: y_data}))
 				writer.close()  
@@ -300,17 +301,13 @@ if __name__ == '__main__':
 	
 
 			# SAVE GRAPH TO PB
-			tf.contrib.quantize.create_eval_graph()
+			graph = sess.graph			
+			#tf.contrib.quantize.create_eval_graph(graph)
 			# tf.contrib.quantize.create_training_graph()
-
-			dir_for_model = '.'
-			#tf.train.write_graph(graph, dir_for_model,
-			#	'saved_model.pb', as_text=False)
-
-			graph = sess.graph
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
 				sess, graph.as_graph_def(), output_node_names)
 
+			dir_for_model = '.'
 			tf.train.write_graph(output_graph_def, dir_for_model,
 				'saved_model.pb', as_text=False)	
 
@@ -318,3 +315,6 @@ if __name__ == '__main__':
 			#graph_file_name = 'saved_model_gf.pb'			
 			#with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
 			#	f.write(output_graph_def.SerilizeToString())
+
+			#tf.train.write_graph(graph, dir_for_model,
+			#	'saved_model.pb', as_text=False)
