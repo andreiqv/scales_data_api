@@ -171,9 +171,10 @@ if __name__ == '__main__':
 		x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')		
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 
-		print('*************')
-		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1")
-		print(module._graph)
+		if use_hub:
+			print('*************')
+			module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1")
+			print(module._graph)
 	
 		bottleneck_tensor = module(resized_input_tensor)
 
@@ -295,6 +296,15 @@ if __name__ == '__main__':
 			saver = tf.train.Saver()		
 			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 	
-		path_to_model_pb = '.'
-		tf.train.write_graph(graph, path_to_model_pb,
-			'saved_model.pb', as_text=False)		
+
+			# SAVE GRAPH TO PB
+			dir_for_model = '.'
+			#tf.train.write_graph(graph, dir_for_model,
+			#	'saved_model.pb', as_text=False)
+
+			graph_file_name = 'saved_model_gf.pb'		
+			graph = sess.graph
+			output_graph_def = tf.graph_util.convert_variables_to_constants(
+				sess, graph.as_graph_def(), ['reluF2'])
+			with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
+				f.write(output_graph_def.SerilizeToString())
