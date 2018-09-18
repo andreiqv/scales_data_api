@@ -306,5 +306,9 @@ if __name__ == '__main__':
 			graph = sess.graph
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
 				sess, graph.as_graph_def(), ['reluF2'])
-			with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
-				f.write(output_graph_def.SerilizeToString())
+			
+			#with tf.gfile.FastGFile(graph_file_name, 'wb') as f:
+			#	f.write(output_graph_def.SerilizeToString())
+
+			tf.train.write_graph(output_graph_def, dir_for_model,
+				'saved_model.pb', as_text=False)	
