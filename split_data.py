@@ -83,9 +83,7 @@ def split_data_3(data, ratio):
 	for label in labels:
 		category[label] = [z for z in zip3 if z[0] == label]
 
-	train_zip3 = []
-	valid_zip3 = []
-	test_zip3  = []		
+	szip = {'train': [], 'valid': [], 'test': []}	# splitted zip
 
 	for label in labels:
 		len_data = len(category[label])
@@ -93,46 +91,19 @@ def split_data_3(data, ratio):
 		len_valid = len_data * ratio[1] // sum(ratio)
 		len_test  = len_data * ratio[2] // sum(ratio)
 		len_train = len_data - len_valid - len_test	 # all rest in train set
+		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
 		train1 = category[label][ : len_train]
 		valid1 = category[label][len_train : len_train + len_valid]
-		test1 = category[label][len_train + len_valid : ]
-		print('Label {0}: {1} images [{2} {3} {4}] - ({5} {6} {7})'.\
-			format(label, len_data, len_train, len_valid, len_test, len(train1), len(valid1), len(test1)))
+		test1  = category[label][len_train + len_valid : ]
+		szip['train'] += train1
+		szip['valid'] += valid1
+		szip['test']  += test1
 
-		#train_zip3 + 
+	sdata = {'train': dict(), 'valid': dict(), 'test': dict()} # splitted dataset
 
-		#splited_data['valid'][key] = data[key][len_train : len_train + len_valid]
-		#splited_data['test'][key] = data[key][len_train + len_valid : ]
+	for key in sdata:
+		sdata[key]['labels']    = [x[0] for x in szip[key]]
+		sdata[key]['images']    = [x[1] for x in szip[key]]
+		sdata[key]['filenames'] = [x[2] for x in szip[key]]		
 
-	"""
-	data['labels']    = [x[0] for x in zip3]
-	data['images']    = [x[1] for x in zip3]
-	data['filenames'] = [x[2] for x in zip3]
-
-
-	splited_data = {'train': dict(), 'valid': dict(), 'test': dict()}
-	
-	for key in data:
-		splited_data['train'][key] = data[key][ : len_train]
-		splited_data['valid'][key] = data[key][len_train : len_train + len_valid]
-		splited_data['test'][key] = data[key][len_train + len_valid : ]
-
-	train_labels = set(splited_data['train']['labels'])
-	valid_labels = set(splited_data['valid']['labels'])
-	test_labels = set(splited_data['test']['labels'])
-
-	print('\n train_labels:', train_labels)
-	print('\n valid_labels:', valid_labels)
-	print('\n test_labels:', test_labels)
-	
-	if len(valid_labels - train_labels) > 0:
-		print('No labels {0} in train data but in valid'.format(valid_labels - train_labels))
-	if len(test_labels - train_labels) > 0:
-		print('No labels {0} in train data but in test'.format(test_labels - train_labels))
-
-	for key in splited_data:
-		splited_data[key]['size'] = len(splited_data[key]['labels'])
-
-
-	return splited_data		
-	"""
+	return sdata	
