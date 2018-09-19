@@ -27,6 +27,7 @@ import distort
 
 DO_MIX = True # mix dataset before division into train/valid/test subsets
 NUM_CLASSES = 0
+DEBUG = False
 
 np.set_printoptions(precision=4, suppress=True)
 
@@ -114,7 +115,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	for class_id in class_id_set:
 
 		subdir = src_dir + '/' + str(class_id)
-		print(subdir)
+		if DEBUG: print(subdir)
 		files = os.listdir(subdir)
 		num_files = len(files)
 		
@@ -145,7 +146,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			labels.append(label)
 
 			#im.close()
-			print("dir={0}, class={1}: {2}/{3}: {4}".format(class_id, class_index, index_file, num_files, filename))
+			if DEBUG: print("dir={0}, class={1}: {2}/{3}: {4}".format(class_id, class_index, index_file, num_files, filename))
 	
 	print('----')
 	print('Number of classes: {0}'.format(num_classes))	
