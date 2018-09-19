@@ -106,4 +106,7 @@ def split_data_3(data, ratio):
 		sdata[key]['images']    = [x[1] for x in szip[key]]
 		sdata[key]['filenames'] = [x[2] for x in szip[key]]		
 
+	print('train:{}, valid:{}, test:{}'.\
+		format(len(sdata['train']['labels']), len(sdata['valid']['labels']), len(sdata['test']['labels'])))
+
 	return sdata	
