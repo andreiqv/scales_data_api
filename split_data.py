@@ -80,10 +80,20 @@ def split_data_3(data, ratio):
 	labels = { z[0] for z in zip3 }
 	category = dict()
 	for label in labels:
-		category[label] = { z for z in zip3 if z[0] == label}
+		category[label] = [z for z in zip3 if z[0] == label]
 
 	for label in labels:
-		print('Label {0}: {1} images'.format(label, len(category[label])))
+		len_data = len(category[label])
+		len_train = len_data * ratio[0] // sum(ratio)
+		len_valid = len_data * ratio[1] // sum(ratio)
+		len_test  = len_data * ratio[2] // sum(ratio)		
+		train1 = category[label][ : len_train]
+		valid1 = category[label][len_train : len_train + len_valid]
+		test1 = category[label][len_train + len_valid : ]
+		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
+
+		#splited_data['valid'][key] = data[key][len_train : len_train + len_valid]
+		#splited_data['test'][key] = data[key][len_train + len_valid : ]
 
 	"""
 	data['labels']    = [x[0] for x in zip3]
