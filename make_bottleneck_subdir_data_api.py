@@ -212,6 +212,7 @@ def make_tf_dataset(filenames_data):
 
 	print('Train labels (example):', filenames_data['train']['labels'][0:3])
 	print('Valid labels (example):', filenames_data['valid']['labels'][0:3])
+	print('Train filenames (example):', filenames_data['train']['filenames'][0:3])
 
 	# 
 	#print(filenames_data['train']['filenames'])
