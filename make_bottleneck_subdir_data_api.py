@@ -167,7 +167,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	print('Split data 3')
 	#data = split_data.split_data(data, ratio=ratio)
-	data = split_data.split_data_3(data, ratio=ratio)	
+	data = split_data.split_data_1(data, ratio=ratio)	
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
@@ -180,8 +180,6 @@ def input_parser(image_path, label, num_classes):
 	# convert the label to one-hot encoding
 	#NUM_CLASSES = 11
 	#input_height, input_width = SHAPE[0], SHAPE[1]
-
-	print(label)
 
 	one_hot = tf.one_hot(label, num_classes)
 	#one_hot = tf.constant(np.array([1,2,3,4,5,6,7,8,9,10,11]))
@@ -217,12 +215,12 @@ def make_tf_dataset(filenames_data):
 
 	# 
 	#print(filenames_data['train']['filenames'])
-	train_images = tf.constant(filenames_data['train']['filenames'])
-	train_labels = tf.constant(filenames_data['train']['labels'])
-	valid_images = tf.constant(filenames_data['valid']['filenames'])
-	valid_labels = tf.constant(filenames_data['valid']['labels'])
-	test_images = tf.constant(filenames_data['test']['filenames'])
-	test_labels = tf.constant(filenames_data['test']['labels'])
+	train_images = tf.constant(filenames_data['train']['filenames'], dtype=tf.string)
+	train_labels = tf.constant(filenames_data['train']['labels'], dtype=tf.int32)
+	valid_images = tf.constant(filenames_data['valid']['filenames'], dtype=tf.string)
+	valid_labels = tf.constant(filenames_data['valid']['labels'], dtype=tf.int32)
+	test_images = tf.constant(filenames_data['test']['filenames'], dtype=tf.string)
+	test_labels = tf.constant(filenames_data['test']['labels'], dtype=tf.int32)
 	#print(train_labels)
 
 	# create TensorFlow Dataset objects
@@ -400,8 +398,7 @@ if __name__ == '__main__':
 	arguments = parser.parse_args(sys.argv[1:])			
 	NUM_ANGLES 	 = arguments.num
 	#DO_MIX 		 = arguments.mix
-	print('NUM_ANGLES =', 	NUM_ANGLES)
-	#print('DO_MIX =',		DO_MIX)
+	print('DO_MIX =',		DO_MIX)
 
 	if not arguments.src_dir:
 		src_dir = data_dir

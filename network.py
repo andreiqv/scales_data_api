@@ -137,7 +137,6 @@ def inception_resnet_1(x_image):
 		bottleneck_tensor, input_size=bottleneck_tensor_size, num_neurons=1024, 
 		func=tf.sigmoid, name='F1')
 	
-
 	return f1
 
 	
