@@ -1,3 +1,5 @@
+import random
+
 def split_data(data, ratio):
 	""" Split data in train, valid and test datasets.
 	"""
