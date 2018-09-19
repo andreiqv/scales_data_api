@@ -60,6 +60,13 @@ def data_analysis(dir_path):
 	return class_id_set 	
 
 
+def save_labels_to_file(map_label_id):
+
+	with open('labels.txt', 'wt') as f:
+		for label in range(len(map_label_id)):
+			class_id = map_label_id[label]
+			f.write('{0}\n'.format(class_id))
+
 
 #------------------------------------------------
 
@@ -100,7 +107,9 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	map_id_label = {class_id : index for index, class_id in enumerate(id_list)}
 	map_label_id = {index : class_id for index, class_id in enumerate(id_list)}
 	maps = {'id_label' : map_id_label, 'label_id' : map_label_id}
-	num_classes = len(map_id_label)		
+	num_classes = len(map_id_label)
+
+	save_labels_to_file(map_label_id)
 
 	for class_id in class_id_set:
 
