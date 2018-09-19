@@ -20,7 +20,7 @@ def inference(image_file, pb_file):
 	#image = tf.image.resize_images(img, shape, method=tf.image.ResizeMethod.BICUBIC)
 
 	image = image.resize(shape, Image.ANTIALIAS)
-	image_arr = np.array(image, dtype=np.float32) / 256
+	image_arr = np.array(image, dtype=np.float32) / 256.0
 
 	#Plot the image
 	#image.show()
