@@ -43,10 +43,14 @@ def split_data_2(data, ratio, num_labels):
 		splited_data['valid'][key] = data[key][len_train : len_train + len_valid]
 		splited_data['test'][key] = data[key][len_train + len_valid : ]
 
-	for label in range(num_labels):
-		if label not in splited_data['train']['labels']:
-			print('label {0} not in train list'.format(label))
-
+	train_labels = set(splited_data['train']['labels'])
+	valid_labels = set(splited_data['train']['labels'])
+	test_labels = set(splited_data['train']['labels'])
+	
+	if len(valid_labels - train_labels) > 0:
+		print('No labels {0} in train data but in valid'.format(valid_labels - train_labels))
+	if len(test_labels - train_labels) > 0:
+		print('No labels {0} in train data but in test'.format(test_labels - train_labels))
 
 	for key in splited_data:
 		splited_data[key]['size'] = len(splited_data[key]['labels'])
