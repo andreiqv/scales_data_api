@@ -44,8 +44,8 @@ def split_data_2(data, ratio, num_labels):
 		splited_data['test'][key] = data[key][len_train + len_valid : ]
 
 	train_labels = set(splited_data['train']['labels'])
-	valid_labels = set(splited_data['train']['labels'])
-	test_labels = set(splited_data['train']['labels'])
+	valid_labels = set(splited_data['valid']['labels'])
+	test_labels = set(splited_data['test']['labels'])
 
 	print('\n train_labels:', train_labels)
 	print('\n valid_labels:', valid_labels)

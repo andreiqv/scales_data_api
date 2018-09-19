@@ -406,7 +406,7 @@ if __name__ == '__main__':
 		dst_file = 'dump.gz'
 
 	filenames_data = make_filenames_list_from_subdir(
-		src_dir=src_dir, shape=SHAPE, ratio=[1,5,5])
+		src_dir=src_dir, shape=SHAPE, ratio=[1,1,1])
 
 	dataset = make_tf_dataset(filenames_data)
 
