@@ -74,6 +74,7 @@ def split_data_3(data, ratio):
 	"""
 
 	zip3 = list(zip(data['labels'], data['images'], data['filenames']))
+
 	random.shuffle(zip3)
 	print('mix ok')
 
@@ -82,16 +83,23 @@ def split_data_3(data, ratio):
 	for label in labels:
 		category[label] = [z for z in zip3 if z[0] == label]
 
+	train_zip3 = []
+	valid_zip3 = []
+	test_zip3  = []		
+
 	for label in labels:
 		len_data = len(category[label])
 		#len_train = len_data * ratio[0] // sum(ratio)
 		len_valid = len_data * ratio[1] // sum(ratio)
 		len_test  = len_data * ratio[2] // sum(ratio)
-		len_train = len_data - len_valid - len_test	
+		len_train = len_data - len_valid - len_test	 # all rest in train set
 		train1 = category[label][ : len_train]
 		valid1 = category[label][len_train : len_train + len_valid]
 		test1 = category[label][len_train + len_valid : ]
-		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
+		print('Label {0}: {1} images [{2} {3} {4}] - ({5} {6} {7})'.\
+			format(label, len_data, len_train, len_valid, len_test, len(train1), len(valid1), len(test1)))
+
+		#train_zip3 + 
 
 		#splited_data['valid'][key] = data[key][len_train : len_train + len_valid]
 		#splited_data['test'][key] = data[key][len_train + len_valid : ]
@@ -101,14 +109,6 @@ def split_data_3(data, ratio):
 	data['images']    = [x[1] for x in zip3]
 	data['filenames'] = [x[2] for x in zip3]
 
-
-	len_data = len(data['labels'])
-	assert len_data == len(data['labels'])
-
-	len_train = len_data * ratio[0] // sum(ratio)
-	len_valid = len_data * ratio[1] // sum(ratio)
-	len_test  = len_data * ratio[2] // sum(ratio)
-	print(len_train, len_valid, len_test)
 
 	splited_data = {'train': dict(), 'valid': dict(), 'test': dict()}
 	
