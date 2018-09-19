@@ -66,7 +66,7 @@ def inference(image_file, pb_file):
 
 				print(p_val)
 				print(np.max(p_val))
-				print('label: ', label)
+				print('index={0}, label={1}'.format(index, label))
 
 				return label
 
