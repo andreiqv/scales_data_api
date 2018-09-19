@@ -83,7 +83,7 @@ def split_data_3(data, ratio):
 		category[label] = { z for z in zip3 if z[0] == label}
 
 	for label in labels:
-		print('Label {0}: {1} images'.format())
+		print('Label {0}: {1} images'.format(label, len(category[label])))
 
 	"""
 	data['labels']    = [x[0] for x in zip3]
