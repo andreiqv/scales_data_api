@@ -25,7 +25,7 @@ import network
 import split_data
 import distort
 
-DO_MIX = True # mix dataset before division into train/valid/test subsets
+DO_MIX = False # mix dataset before division into train/valid/test subsets
 NUM_CLASSES = 0
 DEBUG = False
 
@@ -154,7 +154,8 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	data = {'images':feature_vectors, 'labels': labels, 'filenames':filenames}
 
-	# mix data	
+	# mix data
+
 	if DO_MIX:
 		print('start mix data')
 		zip3 = list(zip(data['images'], data['labels'], data['filenames']))
