@@ -163,7 +163,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 		data['labels']    = [x[1] for x in zip3]
 		data['filenames'] = [x[2] for x in zip3]
 
-	print('Split data')
+	print('Split data 22')
 	#data = split_data.split_data(data, ratio=ratio)
 	data = split_data.split_data_2(data, ratio=ratio, num_labels=num_classes)
 
