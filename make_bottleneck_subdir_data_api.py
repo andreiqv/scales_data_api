@@ -166,6 +166,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	print('Split data 22')
 	#data = split_data.split_data(data, ratio=ratio)
 	data = split_data.split_data_2(data, ratio=ratio, num_labels=num_classes)
+	sys.exit(0)
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
