@@ -181,6 +181,8 @@ def input_parser(image_path, label, num_classes):
 	#NUM_CLASSES = 11
 	#input_height, input_width = SHAPE[0], SHAPE[1]
 
+	print(label)
+
 	one_hot = tf.one_hot(label, num_classes)
 	#one_hot = tf.constant(np.array([1,2,3,4,5,6,7,8,9,10,11]))
 
