@@ -51,7 +51,8 @@ def inference(image_file, pb_file):
 				if use_hub_model:
 					input_output_placeholders = ['Placeholder:0', 'final_result:0']
 				else:
-					input_output_placeholders = ['Placeholder-x:0', 'reluF2:0']
+					input_output_placeholders = ['Placeholder-x:0', 'reluF1:0']
+					#input_output_placeholders = ['Placeholder-x:0', 'reluF2:0']
 					#input_output_placeholders = ['Placeholder-x:0', 'Mean:0']
 
 				print("import graph")	
