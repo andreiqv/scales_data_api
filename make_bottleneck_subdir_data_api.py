@@ -167,7 +167,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	print('Split data 3')
 	#data = split_data.split_data(data, ratio=ratio)
-	data = split_data.split_data_1(data, ratio=ratio)	
+	data = split_data.split_data_3(data, ratio=ratio)	
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
@@ -210,8 +210,8 @@ def input_parser(image_path, label, num_classes):
 
 def make_tf_dataset(filenames_data):
 
-	print('Train labels:', filenames_data['train']['labels'])
-	print('Valid labels:', filenames_data['valid']['labels'])
+	print('Train labels (example):', filenames_data['train']['labels'][0:3])
+	print('Valid labels (example):', filenames_data['valid']['labels'][0:3])
 
 	# 
 	#print(filenames_data['train']['filenames'])
