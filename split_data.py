@@ -46,6 +46,10 @@ def split_data_2(data, ratio, num_labels):
 	train_labels = set(splited_data['train']['labels'])
 	valid_labels = set(splited_data['train']['labels'])
 	test_labels = set(splited_data['train']['labels'])
+
+	print('\n train_labels:', train_labels)
+	print('\n valid_labels:', valid_labels)
+	print('\n test_labels:', test_labels)
 	
 	if len(valid_labels - train_labels) > 0:
 		print('No labels {0} in train data but in valid'.format(valid_labels - train_labels))
