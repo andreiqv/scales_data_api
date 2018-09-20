@@ -51,7 +51,7 @@ def network1(input_tensor, input_size, output_size):
 
 	f1 = fullyConnectedLayer(
 		input_tensor, input_size=bottleneck_tensor_size, num_neurons=output_size, 
-		func=tf.nn.sigmoid, name='F1') # func=tf.nn.relu
+		func=tf.nn.sigmoid, name='_out') # func=tf.nn.relu
 	
 	return f1
 
@@ -65,7 +65,7 @@ def network2(input_tensor, input_size, output_size, hidden_num=HIDDEN_NUM):
 	drop1 = tf.layers.dropout(inputs=f1, rate=0.4)	
 	
 	f2 = fullyConnectedLayer(drop1, input_size=hidden_num, num_neurons=output_size, 
-		func=tf.nn.sigmoid, name='F2')
+		func=tf.nn.sigmoid, name='_out')
 
 	return f2
 
@@ -97,10 +97,10 @@ if __name__ == '__main__':
 
 	if arguments.k == 1:	
 		neural_network = network1
-		output_node_names = ['reluF1']
+		output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
 		neural_network = network2
-		output_node_names = ['reluF2']
+		output_node_names = ['sigmoid_out']
 	else:
 		raise Exception('Bad argument arguments.k')
 
