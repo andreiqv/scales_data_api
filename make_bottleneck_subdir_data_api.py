@@ -25,7 +25,7 @@ import network
 import split_data
 import distort
 
-DO_MIX = False # mix dataset before division into train/valid/test subsets
+DO_MIX = True # mix dataset before division into train/valid/test subsets
 NUM_CLASSES = 0
 DEBUG = False
 
@@ -36,7 +36,8 @@ from model import module, SHAPE, data_dir
 
 #---------------------------------
 
-def data_analysis(dir_path):
+"""
+def dataset_analysis(dir_path):
 
 	class_id_set = set()
 	#num_classes = 412
@@ -59,7 +60,7 @@ def data_analysis(dir_path):
 		class_id_set.add(class_id)
 
 	return class_id_set 	
-
+"""
 
 def save_labels_to_file(map_label_id):
 
@@ -125,7 +126,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			ext = os.path.splitext(filename)[1]
 			if not ext in {'.jpg', ".png"} : continue
 
-			if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
+			#if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
 
 			class_index = map_id_label[class_id]
 			
@@ -155,7 +156,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	data = {'images':feature_vectors, 'labels': labels, 'filenames':filenames}
 
 	# mix data
-
+ 	# it's not necessary because it is already inside split_data_3
 	if DO_MIX:
 		print('start mix data')
 		zip3 = list(zip(data['images'], data['labels'], data['filenames']))

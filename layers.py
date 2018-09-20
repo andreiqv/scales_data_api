@@ -49,7 +49,7 @@ def fullyConnectedLayer(p_in, input_size, num_neurons, func=None, name=''):
 	W = weight_variable([input_size, num_neurons], name='W'+name)
 	b = bias_variable([num_neurons], name='b'+name)
 	if func:
-		h = func(tf.matmul(p_in, W) + b, name='relu'+name)
+		h = func(tf.matmul(p_in, W) + b, name=func.__name__ + name)
 	else:
 		h = tf.matmul(p_in, W) + b
 	print('h{0} = {1}'.format(name, h))

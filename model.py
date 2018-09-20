@@ -12,7 +12,7 @@ if not use_hub:
 	SHAPE = 224, 224, 3
 
 	bottleneck_tensor_size =  588 #1536
-	BATCH_SIZE = 2
+	BATCH_SIZE = 10
 	DISPLAY_INTERVAL, NUM_ITERS = 1, 500	
 
 else:

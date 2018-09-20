@@ -22,17 +22,14 @@ def split_data_3(data, ratio):
 
 	for label in labels:
 		len_data = len(category[label])
-		#len_train = len_data * ratio[0] // sum(ratio)
 		len_valid = len_data * ratio[1] // sum(ratio)
 		len_test  = len_data * ratio[2] // sum(ratio)
 		len_train = len_data - len_valid - len_test	 # all rest in train set
+		#if 'len_train = len_data * ratio[0] // sum(ratio)', then not all images will be used
 		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
-		train1 = category[label][ : len_train]
-		valid1 = category[label][len_train : len_train + len_valid]
-		test1  = category[label][len_train + len_valid : ]
-		szip['train'] += train1
-		szip['valid'] += valid1
-		szip['test']  += test1
+		szip['train'] += category[label][ : len_train]
+		szip['valid'] += category[label][len_train : len_train + len_valid]
+		szip['test']  += category[label][len_train + len_valid : ]
 
 	sdata = {'train': dict(), 'valid': dict(), 'test': dict()} # splitted dataset
 
