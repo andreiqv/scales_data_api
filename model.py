@@ -18,7 +18,8 @@ if not use_hub:
 else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
-	data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped/'
+	data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped'
+	data_dir = data_dir.strip('/')
 
 	import tensorflow_hub as hub
 

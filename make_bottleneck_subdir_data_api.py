@@ -167,21 +167,16 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 		data['filenames'] = [x[2] for x in zip3]
 
 	print('Split data 3')
-	data = split_data.split_data_3(data, ratio=ratio)
+	data = split_data.split_data_1(data, ratio=ratio)
 	#data = split_data.split_data_3(data, ratio=ratio)	
 	
 	assert type(data['train']['labels'][0]) is int
 	assert type(data['train']['filenames'][0]) is str
-
 	#print(data['train']['labels'])
 	#print(data['train']['filenames'])
 	for i in range(len(data['train']['labels'])):
 		print('{0} - {1}'.format(data['train']['labels'][i], data['train']['filenames'][i]))
 
-	
-
-
-	sys.exit(0)
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
@@ -329,6 +324,8 @@ def make_bottleneck_with_tf(dataset, shape):
 				bottleneck_data['train']['images'] += images
 				bottleneck_data['train']['labels'] += labels
 				#print(labels)
+				print('{0}: {1}'.format(labels[0],feature_vectors[0]))
+
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
 				break
@@ -435,5 +432,7 @@ if __name__ == '__main__':
 	print('Train size:', len(bottleneck_data['train']['images']))
 	print('Valid size:', len(bottleneck_data['valid']['images']))
 	print('Test size:', len(bottleneck_data['test']['images']))
+	# here images contain feature vectors
+
 
 	save_data_dump(bottleneck_data, dst_file=dst_file)
