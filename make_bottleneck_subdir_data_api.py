@@ -169,7 +169,19 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	print('Split data 3')
 	data = split_data.split_data_3(data, ratio=ratio)
 	#data = split_data.split_data_3(data, ratio=ratio)	
-	#sys.exit(0)
+	
+	assert type(data['train']['labels'][0]) is int
+	assert type(data['train']['filenames'][0]) is str
+
+	#print(data['train']['labels'])
+	#print(data['train']['filenames'])
+	for i in range(len(data['train']['labels'])):
+		print('{0} - {1}'.format(data['train']['labels'][i], data['train']['filenames'][i]))
+
+	
+
+
+	sys.exit(0)
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id

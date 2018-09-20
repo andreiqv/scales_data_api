@@ -49,10 +49,6 @@ def split_data_3(data, ratio):
 	for key in sdata:
 		sdata[key]['size'] = len(sdata[key]['labels'])
 
-	#print(sdata['train']['labels'])
-	#print(sdata['train']['filenames'])
-
-
 	return sdata	
 
 
