@@ -138,7 +138,9 @@ if __name__ == '__main__':
 	print('test size:', len(valid['labels']))
 	print('Data was loaded.')
 	print('Example of data:', train_data[0])
+	print('size of vector:', len(train_data[0]))
 	print('Example of label:',train_labels[0])
+	print('size of vector:', len(train_labels[0]))
 	#sys.exit()
 
 	#train_data = [np.transpose(t) for t in train_data]
@@ -252,7 +254,11 @@ if __name__ == '__main__':
 					if valid_acc > min_valid_acc:
 						min_valid_acc = valid_acc
 
-					epoch = iteration//(num_train_batches // BATCH_SIZE * BATCH_SIZE)
+					try:
+						epoch = iteration//(num_train_batches // BATCH_SIZE * BATCH_SIZE)
+					except:
+						epoch = 0
+
 					print('epoch {0:2} (i={1:06}): train={2:0.4f}, valid={3:0.4f} (max={4:0.4f}) [top5={5:0.4f}, top6={6:0.4f}]'.\
 						format(epoch, iteration, train_acc, valid_acc, min_valid_acc, valid_acc_top5, valid_acc_top6))
 
