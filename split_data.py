@@ -32,7 +32,7 @@ def split_data_3(data, ratio):
 		szip['test']  += category[label][len_train + len_valid : ]
 
 		print(szip['train'][-1])
-		print(szip['valid'][-1])
+		#print(szip['valid'][-1])
 
 	random.shuffle(szip['train'])	
 
