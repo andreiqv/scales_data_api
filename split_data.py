@@ -46,8 +46,8 @@ def split_data_3(data, ratio):
 	print('train:{}, valid:{}, test:{}'.\
 		format(len(sdata['train']['labels']), len(sdata['valid']['labels']), len(sdata['test']['labels'])))
 
-	print(sdata['train']['labels'])
-	print(sdata['train']['filenames'])
+	#print(sdata['train']['labels'])
+	#print(sdata['train']['filenames'])
 
 
 	return sdata	
