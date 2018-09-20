@@ -13,7 +13,7 @@ if not use_hub:
 
 	bottleneck_tensor_size =  588 #1536
 	BATCH_SIZE = 10
-	DISPLAY_INTERVAL, NUM_ITERS = 1, 500	
+	DISPLAY_INTERVAL, NUM_ITERS = 10, 500	
 
 else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
@@ -42,4 +42,4 @@ else:
 	bottleneck_tensor_size =  1536
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 32
-	DISPLAY_INTERVAL, NUM_ITERS = 100, 1000*1500
+	DISPLAY_INTERVAL, NUM_ITERS = 10000, 1000*1500

@@ -5,7 +5,7 @@ import tensorflow as tf
 def auпgment_dataset_no_labels(dataset, mult=1):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
-	dataset = dataset.shuffle(60000).repeat(mult)
+	dataset = dataset.shuffle(10000).repeat(mult)
 
 	def _random_distord(images):
 
@@ -30,10 +30,10 @@ def auпgment_dataset_no_labels(dataset, mult=1):
 
 
 
-def augment_dataset_2(dataset):
+def augment_dataset_2(dataset, mult=1):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
-	dataset = dataset.shuffle(60000).repeat(5)
+	dataset = dataset.shuffle(60000).repeat(mult)
 
 	def _random_distord(images, labels):
 

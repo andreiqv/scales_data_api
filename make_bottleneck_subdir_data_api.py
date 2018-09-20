@@ -217,23 +217,23 @@ def make_tf_dataset(filenames_data):
 
 	# 
 	#print(filenames_data['train']['filenames'])
-	train_images = tf.constant(filenames_data['train']['filenames'], dtype=tf.string)
+	train_filenames = tf.constant(filenames_data['train']['filenames'], dtype=tf.string)
 	train_labels = tf.constant(filenames_data['train']['labels'], dtype=tf.int32)
-	valid_images = tf.constant(filenames_data['valid']['filenames'], dtype=tf.string)
+	valid_filenames = tf.constant(filenames_data['valid']['filenames'], dtype=tf.string)
 	valid_labels = tf.constant(filenames_data['valid']['labels'], dtype=tf.int32)
-	test_images = tf.constant(filenames_data['test']['filenames'], dtype=tf.string)
-	test_labels = tf.constant(filenames_data['test']['labels'], dtype=tf.int32)
+	test_filenames = tf.constant(filenames_data['test']['filenames'],   dtype=tf.string)
+	test_labels = tf.constant(filenames_data['test']['labels'],   dtype=tf.int32)
 	#print(train_labels)
 
 	# create TensorFlow Dataset objects
-	train_data = Dataset.from_tensor_slices((train_images, train_labels))
-	valid_data = Dataset.from_tensor_slices((valid_images, valid_labels))
-	test_data  = Dataset.from_tensor_slices((test_images, test_labels))
+	train_data = Dataset.from_tensor_slices((train_filenames, train_labels))
+	valid_data = Dataset.from_tensor_slices((valid_filenames, valid_labels))
+	test_data  = Dataset.from_tensor_slices((test_filenames, test_labels))
 	print(train_data)
 	print(valid_data)
 	print(test_data)
 
-	# load images and labels:
+	# Load images from files:
 	num_classes = filenames_data['num_classes']
 	input_parser_two_arg = lambda x,y : input_parser(x, y, num_classes)
 	train_data = train_data.map(input_parser_two_arg)
@@ -242,10 +242,11 @@ def make_tf_dataset(filenames_data):
 
 	#dataset = dataset.batch(batch_size)
 
-	# AUGMENTATION (Distrot only train dataset)
-	do_augmentation = True
+	# AUGMENTATION (only for train dataset)
+	do_augmentation = False
 	if do_augmentation: 
-		train_data = distort.augment_dataset_2(train_data)
+		train_data = distort.augment_dataset_2(train_data, mult=1)
+		#train_data = distort.auпgment_dataset_no_labels(train_data, mult=1)		
 		#train_data = distort.augment_dataset(train_data)
 
 	batch_size = 16
