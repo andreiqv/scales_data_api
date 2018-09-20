@@ -31,6 +31,11 @@ def split_data_3(data, ratio):
 		szip['valid'] += category[label][len_train : len_train + len_valid]
 		szip['test']  += category[label][len_train + len_valid : ]
 
+		print(szip['train'][-1])
+		print(szip['valid'][-1])
+
+	random.shuffle(szip['train'])	
+
 	sdata = {'train': dict(), 'valid': dict(), 'test': dict()} # splitted dataset
 
 	for key in sdata:
@@ -40,6 +45,10 @@ def split_data_3(data, ratio):
 
 	print('train:{}, valid:{}, test:{}'.\
 		format(len(sdata['train']['labels']), len(sdata['valid']['labels']), len(sdata['test']['labels'])))
+
+	print(sdata['train']['labels'])
+	print(sdata['train']['filenames'])
+
 
 	return sdata	
 
