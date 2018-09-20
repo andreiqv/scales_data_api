@@ -167,8 +167,8 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 		data['filenames'] = [x[2] for x in zip3]
 
 	print('Split data')
-	data = split_data.split_data_1(data, ratio=ratio)
-	#data = split_data.split_data_3(data, ratio=ratio)	
+	data = split_data.split_data_v3(data, ratio=ratio)
+	#data = split_data.split_data_v3(data, ratio=ratio)	
 	
 	assert type(data['train']['labels'][0]) is int
 	assert type(data['train']['filenames'][0]) is str
@@ -176,7 +176,6 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	#print(data['train']['filenames'])
 	for i in range(len(data['train']['labels'])):
 		print('{0} - {1}'.format(data['train']['labels'][i], data['train']['filenames'][i]))
-
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
@@ -198,7 +197,7 @@ def input_parser(image_path, label, num_classes):
 	image_decoded = tf.image.decode_jpeg(image_string)
 	image_resized = tf.image.resize_images(image_decoded, [SHAPE[1], SHAPE[0]],
                                                method=tf.image.ResizeMethod.BICUBIC)
-	#image = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
+	image = tf.cast(image_resized, tf.float32) / tf.constant(256.0)
 	image = tf.cast(image_resized, tf.float32)
 
 	"""
@@ -251,7 +250,7 @@ def make_tf_dataset(filenames_data):
 	#dataset = dataset.batch(batch_size)
 
 	# AUGMENTATION (only for train dataset)
-	do_augmentation = True
+	do_augmentation = False
 	if do_augmentation: 
 		train_data = distort.augment_dataset_2(train_data, mult=6)
 		#train_data = distort.auпgment_dataset_no_labels(train_data, mult=1)		
@@ -343,7 +342,8 @@ def make_bottleneck_with_tf(dataset, shape):
 				images = list(map(list, feature_vectors))
 				labels = list(map(list, batch[1]))
 				bottleneck_data['valid']['images'] += images
-				bottleneck_data['valid']['labels'] += labels								
+				bottleneck_data['valid']['labels'] += labels
+				#print('{0}: {1}'.format(labels[0],feature_vectors[0]))							
 				#print(labels)
 			except tf.errors.OutOfRangeError:
 				print("End of validation dataset.")
@@ -386,6 +386,17 @@ def save_data_dump(data, dst_file):
 	f.write(dump)
 	print('dump was written')
 	f.close()
+
+
+def save_to_txt_file(bottleneck_data):	
+
+	with open('bottleneck_data.txt', 'wt') as f:
+		for key in bottleneck_data:
+			if key not in {'train','valid','test'}: continue
+			f.write('\n PART {0}:\n'.format(key))			
+			for i in range(len(bottleneck_data[key]['labels'])):
+				f.write('{0}: {1}\n'.format(\
+					bottleneck_data[key]['labels'][i], sum(bottleneck_data[key]['images'][i])))
 
 
 
@@ -434,5 +445,6 @@ if __name__ == '__main__':
 	print('Test size:', len(bottleneck_data['test']['images']))
 	# here images contain feature vectors
 
+	save_to_txt_file(bottleneck_data)
 
 	save_data_dump(bottleneck_data, dst_file=dst_file)

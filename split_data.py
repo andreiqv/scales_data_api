@@ -1,7 +1,7 @@
 import random
 
 
-def split_data_3(data, ratio):
+def split_data_v3(data, ratio):
 	""" ver-3:
 	Shuffle and split dataset in train, valid and test subsets 
 	for each category.
@@ -53,7 +53,7 @@ def split_data_3(data, ratio):
 	return sdata	
 
 
-def split_data_2(data, ratio, num_labels):
+def split_data_v2(data, ratio, num_labels):
 	""" Split and check that train set contains representatives of all classes.
 	"""
 
@@ -93,7 +93,7 @@ def split_data_2(data, ratio, num_labels):
 
 
 
-def split_data_1(data, ratio):
+def split_data_v1(data, ratio):
 	""" Split data in train, valid and test datasets.
 	"""
 
