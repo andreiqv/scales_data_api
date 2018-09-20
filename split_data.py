@@ -13,6 +13,7 @@ def split_data_3(data, ratio):
 	random.shuffle(zip3)
 	print('mix ok')
 
+	# divide into classes
 	labels = { z[0] for z in zip3 }
 	category = dict()
 	for label in labels:
@@ -41,7 +42,7 @@ def split_data_3(data, ratio):
 	for key in sdata:
 		sdata[key]['labels']    = [x[0] for x in szip[key]]
 		sdata[key]['images']    = [x[1] for x in szip[key]]
-		sdata[key]['filenames'] = [x[2] for x in szip[key]]		
+		sdata[key]['filenames'] = [x[2] for x in szip[key]]	
 
 	print('train:{}, valid:{}, test:{}'.\
 		format(len(sdata['train']['labels']), len(sdata['valid']['labels']), len(sdata['test']['labels'])))
@@ -59,9 +60,10 @@ def split_data_2(data, ratio, num_labels):
 	len_data = len(data['labels'])
 	assert len_data == len(data['labels'])
 
-	len_train = len_data * ratio[0] // sum(ratio)
+	#len_train = len_data * ratio[0] // sum(ratio)
 	len_valid = len_data * ratio[1] // sum(ratio)
 	len_test  = len_data * ratio[2] // sum(ratio)
+	len_train = len_data - len_valid - len_test	 # all rest in train set
 	print(len_train, len_valid, len_test)
 
 	splited_data = {'train': dict(), 'valid': dict(), 'test': dict()}
@@ -97,10 +99,10 @@ def split_data_1(data, ratio):
 
 	len_data = len(data['labels'])
 	assert len_data == len(data['labels'])
-
-	len_train = len_data * ratio[0] // sum(ratio)
+	#len_train = len_data * ratio[0] // sum(ratio)
 	len_valid = len_data * ratio[1] // sum(ratio)
 	len_test  = len_data * ratio[2] // sum(ratio)
+	len_train = len_data - len_valid - len_test	 # all rest in train set
 	print(len_train, len_valid, len_test)
 
 	splited_data = {'train': dict(), 'valid': dict(), 'test': dict()}

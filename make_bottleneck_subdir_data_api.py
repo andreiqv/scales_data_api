@@ -166,8 +166,8 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 		data['labels']    = [x[1] for x in zip3]
 		data['filenames'] = [x[2] for x in zip3]
 
-	print('Split data 3')
-	data = split_data.split_data_3(data, ratio=ratio)
+	print('Split data')
+	data = split_data.split_data_1(data, ratio=ratio)
 	#data = split_data.split_data_3(data, ratio=ratio)	
 	
 	assert type(data['train']['labels'][0]) is int
@@ -251,9 +251,9 @@ def make_tf_dataset(filenames_data):
 	#dataset = dataset.batch(batch_size)
 
 	# AUGMENTATION (only for train dataset)
-	do_augmentation = False
+	do_augmentation = True
 	if do_augmentation: 
-		train_data = distort.augment_dataset_2(train_data, mult=1)
+		train_data = distort.augment_dataset_2(train_data, mult=6)
 		#train_data = distort.auпgment_dataset_no_labels(train_data, mult=1)		
 		#train_data = distort.augment_dataset(train_data)
 
@@ -324,7 +324,7 @@ def make_bottleneck_with_tf(dataset, shape):
 				bottleneck_data['train']['images'] += images
 				bottleneck_data['train']['labels'] += labels
 				#print(labels)
-				print('{0}: {1}'.format(labels[0],feature_vectors[0]))
+				#print('{0}: {1}'.format(labels[0],feature_vectors[0]))
 
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
