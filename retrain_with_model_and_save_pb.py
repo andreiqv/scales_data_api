@@ -229,7 +229,7 @@ if __name__ == '__main__':
 
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
-				if iteration % VALIDATION_INTERVAL == 0:
+				if iteration % DISPLAY_INTERVAL == 0:
 
 					train_acc = np.mean( [accuracy.eval( \
 						feed_dict={bottleneck_input:train['images'][i*BATCH_SIZE:(i+1)*BATCH_SIZE], \
