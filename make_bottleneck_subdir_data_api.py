@@ -25,9 +25,8 @@ import network
 import split_data
 import distort
 
-DO_MIX = True # mix dataset before division into train/valid/test subsets
+DO_MIX = True
 NUM_CLASSES = 0
-DEBUG = False
 
 np.set_printoptions(precision=4, suppress=True)
 
@@ -36,8 +35,7 @@ from model import module, SHAPE, data_dir
 
 #---------------------------------
 
-"""
-def dataset_analysis(dir_path):
+def data_analysis(dir_path):
 
 	class_id_set = set()
 	#num_classes = 412
@@ -60,14 +58,7 @@ def dataset_analysis(dir_path):
 		class_id_set.add(class_id)
 
 	return class_id_set 	
-"""
 
-def save_labels_to_file(map_label_id):
-
-	with open('labels.txt', 'wt') as f:
-		for label in range(len(map_label_id)):
-			class_id = map_label_id[label]
-			f.write('{0}\n'.format(class_id))
 
 
 #------------------------------------------------
@@ -109,14 +100,12 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	map_id_label = {class_id : index for index, class_id in enumerate(id_list)}
 	map_label_id = {index : class_id for index, class_id in enumerate(id_list)}
 	maps = {'id_label' : map_id_label, 'label_id' : map_label_id}
-	num_classes = len(map_id_label)
-
-	save_labels_to_file(map_label_id)
+	num_classes = len(map_id_label)		
 
 	for class_id in class_id_set:
 
 		subdir = src_dir + '/' + str(class_id)
-		if DEBUG: print(subdir)
+		print(subdir)
 		files = os.listdir(subdir)
 		num_files = len(files)
 		
@@ -147,7 +136,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			labels.append(label)
 
 			#im.close()
-			if DEBUG: print("dir={0}, class={1}: {2}/{3}: {4}".format(class_id, class_index, index_file, num_files, filename))
+			print("dir={0}, class={1}: {2}/{3}: {4}".format(class_id, class_index, index_file, num_files, filename))
 	
 	print('----')
 	print('Number of classes: {0}'.format(num_classes))	
@@ -155,8 +144,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	data = {'images':feature_vectors, 'labels': labels, 'filenames':filenames}
 
-	# mix data
- 	# it's not necessary because it is already inside split_data_3
+	# mix data	
 	if DO_MIX:
 		print('start mix data')
 		zip3 = list(zip(data['images'], data['labels'], data['filenames']))
@@ -168,14 +156,6 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	print('Split data')
 	data = split_data.split_data_v1(data, ratio=ratio)
-	#data = split_data.split_data_v3(data, ratio=ratio)	
-	
-	assert type(data['train']['labels'][0]) is int
-	assert type(data['train']['filenames'][0]) is str
-	#print(data['train']['labels'])
-	#print(data['train']['filenames'])
-	for i in range(len(data['train']['labels'])):
-		print('{0} - {1}'.format(data['train']['labels'][i], data['train']['filenames'][i]))
 
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
@@ -197,7 +177,7 @@ def input_parser(image_path, label, num_classes):
 	image_decoded = tf.image.decode_jpeg(image_string)
 	image_resized = tf.image.resize_images(image_decoded, [SHAPE[1], SHAPE[0]],
                                                method=tf.image.ResizeMethod.BICUBIC)
-	image = tf.cast(image_resized, tf.float32) / tf.constant(256.0)
+	#image = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
 	image = tf.cast(image_resized, tf.float32)
 
 	"""
@@ -218,29 +198,28 @@ def input_parser(image_path, label, num_classes):
 
 def make_tf_dataset(filenames_data):
 
-	print('Train labels (example):', filenames_data['train']['labels'][0:3])
-	print('Valid labels (example):', filenames_data['valid']['labels'][0:3])
-	print('Train filenames (example):', filenames_data['train']['filenames'][0:3])
+	print('Train labels:', filenames_data['train']['labels'])
+	print('Valid labels:', filenames_data['valid']['labels'])
 
 	# 
 	#print(filenames_data['train']['filenames'])
-	train_filenames = tf.constant(filenames_data['train']['filenames'], dtype=tf.string)
-	train_labels = tf.constant(filenames_data['train']['labels'], dtype=tf.int32)
-	valid_filenames = tf.constant(filenames_data['valid']['filenames'], dtype=tf.string)
-	valid_labels = tf.constant(filenames_data['valid']['labels'], dtype=tf.int32)
-	test_filenames = tf.constant(filenames_data['test']['filenames'],   dtype=tf.string)
-	test_labels = tf.constant(filenames_data['test']['labels'],   dtype=tf.int32)
+	train_images = tf.constant(filenames_data['train']['filenames'])
+	train_labels = tf.constant(filenames_data['train']['labels'])
+	valid_images = tf.constant(filenames_data['valid']['filenames'])
+	valid_labels = tf.constant(filenames_data['valid']['labels'])
+	test_images = tf.constant(filenames_data['test']['filenames'])
+	test_labels = tf.constant(filenames_data['test']['labels'])
 	#print(train_labels)
 
 	# create TensorFlow Dataset objects
-	train_data = Dataset.from_tensor_slices((train_filenames, train_labels))
-	valid_data = Dataset.from_tensor_slices((valid_filenames, valid_labels))
-	test_data  = Dataset.from_tensor_slices((test_filenames, test_labels))
+	train_data = Dataset.from_tensor_slices((train_images, train_labels))
+	valid_data = Dataset.from_tensor_slices((valid_images, valid_labels))
+	test_data  = Dataset.from_tensor_slices((test_images, test_labels))
 	print(train_data)
 	print(valid_data)
 	print(test_data)
 
-	# Load images from files:
+	# load images and labels:
 	num_classes = filenames_data['num_classes']
 	input_parser_two_arg = lambda x,y : input_parser(x, y, num_classes)
 	train_data = train_data.map(input_parser_two_arg)
@@ -249,12 +228,9 @@ def make_tf_dataset(filenames_data):
 
 	#dataset = dataset.batch(batch_size)
 
-	# AUGMENTATION (only for train dataset)
-	do_augmentation = False
-	if do_augmentation: 
-		train_data = distort.augment_dataset_2(train_data, mult=6)
-		#train_data = distort.auпgment_dataset_no_labels(train_data, mult=1)		
+	if False: # Distrot train dataset
 		#train_data = distort.augment_dataset(train_data)
+		train_data = distort.augment_dataset_2(train_data)
 
 	batch_size = 16
 	train_data = train_data.batch(batch_size)
@@ -323,8 +299,6 @@ def make_bottleneck_with_tf(dataset, shape):
 				bottleneck_data['train']['images'] += images
 				bottleneck_data['train']['labels'] += labels
 				#print(labels)
-				#print('{0}: {1}'.format(labels[0],feature_vectors[0]))
-
 			except tf.errors.OutOfRangeError:
 				print("End of training dataset.")
 				break
@@ -342,8 +316,7 @@ def make_bottleneck_with_tf(dataset, shape):
 				images = list(map(list, feature_vectors))
 				labels = list(map(list, batch[1]))
 				bottleneck_data['valid']['images'] += images
-				bottleneck_data['valid']['labels'] += labels
-				#print('{0}: {1}'.format(labels[0],feature_vectors[0]))							
+				bottleneck_data['valid']['labels'] += labels								
 				#print(labels)
 			except tf.errors.OutOfRangeError:
 				print("End of validation dataset.")
@@ -400,6 +373,7 @@ def save_to_txt_file(bottleneck_data):
 
 
 
+
 def createParser ():
 	"""
 	ArgumentParser
@@ -422,7 +396,8 @@ if __name__ == '__main__':
 	arguments = parser.parse_args(sys.argv[1:])			
 	NUM_ANGLES 	 = arguments.num
 	#DO_MIX 		 = arguments.mix
-	print('DO_MIX =',		DO_MIX)
+	print('NUM_ANGLES =', 	NUM_ANGLES)
+	#print('DO_MIX =',		DO_MIX)
 
 	if not arguments.src_dir:
 		src_dir = data_dir
@@ -430,7 +405,7 @@ if __name__ == '__main__':
 		dst_file = 'dump.gz'
 
 	filenames_data = make_filenames_list_from_subdir(
-		src_dir=src_dir, shape=SHAPE, ratio=[8,2,0])
+		src_dir=src_dir, shape=SHAPE, ratio=[9,1,1])
 
 	dataset = make_tf_dataset(filenames_data)
 
@@ -443,8 +418,5 @@ if __name__ == '__main__':
 	print('Train size:', len(bottleneck_data['train']['images']))
 	print('Valid size:', len(bottleneck_data['valid']['images']))
 	print('Test size:', len(bottleneck_data['test']['images']))
-	# here images contain feature vectors
-
-	save_to_txt_file(bottleneck_data)
 
 	save_data_dump(bottleneck_data, dst_file=dst_file)
