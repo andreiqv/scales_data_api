@@ -115,7 +115,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			ext = os.path.splitext(filename)[1]
 			if not ext in {'.jpg', ".png"} : continue
 
-			#if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
+			if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
 
 			class_index = map_id_label[class_id]
 			
@@ -191,7 +191,7 @@ def input_parser(image_path, label, num_classes):
 	image_resized = tf.image.resize_images(image_decoded, [SHAPE[1], SHAPE[0]],
                                                method=tf.image.ResizeMethod.BICUBIC)
 	#image = tf.cast(image_resized, tf.float32)
-	image = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
+	image = tf.cast(image_resized, tf.float32) / tf.constant(256.0)
 
 	"""
 	decoded_image = tf.image.decode_image(image_file, channels=3)
