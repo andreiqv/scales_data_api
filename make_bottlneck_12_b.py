@@ -25,51 +25,16 @@ import network
 import split_data
 import distort
 
-DO_MIX = True
+DO_MIX = False
 NUM_CLASSES = 0
 
-"""
-if os.path.exists('.notebook'):
-	#data_dir = '../data'
-	data_dir = '../separated'
-	module = network.conv_network_224
-	SHAPE = 224, 224, 3
-else:
-	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
-	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
-	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped/'
-	data_dir = '/home/chichivica/Data/Datasets/Scales/tmp'
-	import tensorflow_hub as hub
-
-	model_number = 3
-	type_model = 'feature_vector'
-	#type_model = 'classification'
-	
-	if model_number == 1:		
-		module = hub.Module("https://tfhub.dev/google/imagenet/resnet_v2_152/{0}/1".format(type_model))
-		SHAPE = 224, 224, 3
-	elif model_number == 2:
-		module = hub.Module("https://tfhub.dev/google/imagenet/inception_v3/{0}/1".format(type_model))
-		SHAPE = 299, 299, 3
-	elif model_number == 3:
-		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/{0}/1".format(type_model))
-		SHAPE = 299, 299, 3
-	else:
-		raise Exception('Bad n_model')
-		# https://tfhub.dev/google/imagenet/resnet_v2_152/feature_vector/1
-"""
-
 from model import module, SHAPE, data_dir
-
 np.set_printoptions(precision=4, suppress=True)
 
-
 #---------------------------------
 
-
-
 #---------------------------------
-
+"""
 def data_analysis(dir_path):
 
 	class_id_set = set()
@@ -93,8 +58,14 @@ def data_analysis(dir_path):
 		class_id_set.add(class_id)
 
 	return class_id_set 	
+"""
 
+def save_labels_to_file(map_label_id):
 
+	with open('labels.txt', 'wt') as f:
+		for label in range(len(map_label_id)):
+			class_id = map_label_id[label]
+			f.write('{0}\n'.format(class_id))
 
 #------------------------------------------------
 
