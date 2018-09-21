@@ -157,7 +157,6 @@ def split_data_v2(data, ratio, num_labels):
 	return splited_data	
 
 
-
 def split_data_v1(data, ratio):
 	""" Split data in train, valid and test datasets.
 	"""
@@ -182,6 +181,6 @@ def split_data_v1(data, ratio):
 
 	return splited_data
 
-
+split_data = split_data_v1
 
 
