@@ -25,7 +25,7 @@ import network
 import split_data
 import distort
 
-DO_MIX = True
+DO_MIX = False
 NUM_CLASSES = 0
 
 np.set_printoptions(precision=4, suppress=True)
