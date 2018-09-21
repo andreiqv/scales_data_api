@@ -1,13 +1,8 @@
 import random
 
 
-
+"""
 def split_data_v4(data, ratio):
-	""" ver-3:
-	Shuffle and split dataset in train, valid and test subsets 
-	for each category.
-	"""
-
 	zip3 = list(zip(data['labels'], data['images'], data['filenames']))
 	#random.shuffle(zip3)
 	#print('mix ok')
@@ -49,14 +44,6 @@ def split_data_v4(data, ratio):
 	sdata['test']['images']    = [x[1] for x in szip['test']]
 	sdata['test']['filenames'] = [x[2] for x in szip['test']]	
 
-
-	"""
-	for key in sdata:
-		sdata[key]['labels']    = [x[0] for x in szip[key]]
-		sdata[key]['images']    = [x[1] for x in szip[key]]
-		sdata[key]['filenames'] = [x[2] for x in szip[key]]	
-	"""
-
 	print('train:{}, valid:{}, test:{}'.\
 		format(len(sdata['train']['labels']), len(sdata['valid']['labels']), len(sdata['test']['labels'])))
 
@@ -64,7 +51,7 @@ def split_data_v4(data, ratio):
 		sdata[key]['size'] = len(sdata[key]['labels'])
 
 	return sdata	
-
+"""
 
 def split_data_v3(data, ratio):
 	""" ver-3:
