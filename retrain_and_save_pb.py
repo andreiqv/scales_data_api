@@ -135,7 +135,7 @@ if __name__ == '__main__':
 
 	print('train size:', len(train['labels']))
 	print('valid size:', len(valid['labels']))
-	print('test size:', len(valid['labels']))
+	print('test size:', len(test['labels']))
 	print('Data was loaded.')
 	print('Example of data:', train_data[0])
 	print('size of vector:', len(train_data[0]))
