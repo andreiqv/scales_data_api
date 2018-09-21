@@ -234,9 +234,9 @@ def make_tf_dataset(filenames_data):
 
 	#dataset = dataset.batch(batch_size)
 
-	if False: # Distrot train dataset
+	if True: # Distrot train dataset
 		#train_data = distort.augment_dataset(train_data)
-		train_data = distort.augment_dataset_2(train_data)
+		train_data = distort.augment_dataset_2(train_data, mult=5)
 
 	batch_size = 16
 	train_data = train_data.batch(batch_size)
