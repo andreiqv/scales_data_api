@@ -190,8 +190,8 @@ def input_parser(image_path, label, num_classes):
 	image_decoded = tf.image.decode_jpeg(image_string)
 	image_resized = tf.image.resize_images(image_decoded, [SHAPE[1], SHAPE[0]],
                                                method=tf.image.ResizeMethod.BICUBIC)
-	#image = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
-	image = tf.cast(image_resized, tf.float32)
+	#image = tf.cast(image_resized, tf.float32)
+	image = tf.cast(image_resized, tf.float32) / tf.constant(255.0)
 
 	"""
 	decoded_image = tf.image.decode_image(image_file, channels=3)
