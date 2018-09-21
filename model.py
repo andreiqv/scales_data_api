@@ -19,7 +19,7 @@ else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
 	data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped'
-	#data_dir = '/home/chichivica/Data/Datasets/Scales/tmp'
+	data_dir = '/home/chichivica/Data/Datasets/Scales/tmp'
 	data_dir = data_dir.rstrip('/')
 
 	import tensorflow_hub as hub
