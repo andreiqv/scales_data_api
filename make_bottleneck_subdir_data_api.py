@@ -167,7 +167,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 		data['filenames'] = [x[2] for x in zip3]
 
 	print('Split data')
-	data = split_data.split_data_v3(data, ratio=ratio)
+	data = split_data.split_data_v1(data, ratio=ratio)
 	#data = split_data.split_data_v3(data, ratio=ratio)	
 	
 	assert type(data['train']['labels'][0]) is int
@@ -396,7 +396,7 @@ def save_to_txt_file(bottleneck_data):
 			f.write('\n PART {0}:\n'.format(key))			
 			for i in range(len(bottleneck_data[key]['labels'])):
 				f.write('{0}: {1}\n'.format(\
-					bottleneck_data[key]['labels'][i], sum(bottleneck_data[key]['images'][i])))
+					bottleneck_data[key]['labels'][i], np.mean(bottleneck_data[key]['images'][i])))
 
 
 

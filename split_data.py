@@ -27,13 +27,12 @@ def split_data_v3(data, ratio):
 		len_test  = len_data * ratio[2] // sum(ratio)
 		len_train = len_data - len_valid - len_test	 # all rest in train set
 		#if 'len_train = len_data * ratio[0] // sum(ratio)', then not all images will be used
-		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
 		szip['train'] += category[label][ : len_train]
 		szip['valid'] += category[label][len_train : len_train + len_valid]
 		szip['test']  += category[label][len_train + len_valid : ]
 
+		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
 		print(szip['train'][-1])
-		#print(szip['valid'][-1])
 
 	random.shuffle(szip['train'])	
 
