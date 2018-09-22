@@ -2,6 +2,34 @@ import tensorflow as tf
 
 
 
+def augment_dataset(dataset, mult=1):
+	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
+	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
+	dataset = dataset.shuffle(60000).repeat(mult)
+
+	def _random_distord(images, labels):
+
+		images = tf.image.random_flip_left_right(images)
+
+		#images = tf.image.random_hue(images, max_delta=0.05)
+		#images = tf.image.random_contrast(images, lower=0.3, upper=1.8)
+		#images = tf.image.random_brightness(images, max_delta=0.3)
+		#images = tf.image.random_saturation(images, lower=0.0, upper=2.0)
+		images = tf.image.random_hue(images, max_delta=0.02)
+		images = tf.image.random_contrast(images, lower=0.5, upper=1.5)
+		images = tf.image.random_brightness(images, max_delta=0.2)
+		images = tf.image.random_saturation(images, lower=0.5, upper=1.5)
+
+		images = tf.minimum(images, 1.0)
+		images = tf.maximum(images, 0.0)		
+
+		return images, labels
+
+	dataset = dataset.map(_random_distord)
+
+	return dataset
+
+
 def auпgment_dataset_no_labels(dataset, mult=1):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
@@ -29,32 +57,7 @@ def auпgment_dataset_no_labels(dataset, mult=1):
 
 
 
-
-def augment_dataset_2(dataset, mult=1):
-	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
-	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
-	dataset = dataset.shuffle(60000).repeat(mult)
-
-	def _random_distord(images, labels):
-
-		images = tf.image.random_flip_left_right(images)
-
-		images = tf.image.random_hue(images, max_delta=0.05)
-		images = tf.image.random_contrast(images, lower=0.3, upper=1.8)
-		images = tf.image.random_brightness(images, max_delta=0.3)
-		images = tf.image.random_saturation(images, lower=0.0, upper=2.0)
-
-		images = tf.minimum(images, 1.0)
-		images = tf.maximum(images, 0.0)		
-
-		return images, labels
-
-	dataset = dataset.map(_random_distord)
-
-	return dataset
-
-
-def augment_dataset(dataset):
+def augment_dataset_with_toss(dataset):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
 	dataset = dataset.shuffle(60000).repeat(5)
@@ -103,3 +106,6 @@ def augment_dataset(dataset):
 	dataset = dataset.map(_random_distord)
 
 	return dataset
+
+
+augment_dataset_2 = augment_dataset
