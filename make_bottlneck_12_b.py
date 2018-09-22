@@ -25,6 +25,7 @@ import network
 import split_data
 import distort
 
+#DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
 
@@ -121,7 +122,8 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			ext = os.path.splitext(filename)[1]
 			if not ext in {'.jpg', ".png"} : continue
 
-			if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
+			# ????
+			#if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
 
 			class_index = map_id_label[class_id]
 			
@@ -163,11 +165,35 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	print('Split data')
 	data = split_data.split_data_v3(data, ratio=ratio)
 
+
+	assert type(data['train']['labels'][0]) is int
+	assert type(data['train']['filenames'][0]) is str
+	#print(data['train']['labels'])
+	#print(data['train']['filenames'])
+	print('TRAIN')
+	for i in range(len(data['train']['labels'])):
+		print('{0} - {1}'.format(data['train']['labels'][i], data['train']['filenames'][i]))
+	print('VALID')
+	for i in range(len(data['valid']['labels'])):
+		print('{0} - {1}'.format(data['valid']['labels'][i], data['valid']['filenames'][i]))
+
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
 	data['num_classes'] = num_classes
 
 	return data
+
+
+def save_bottleneck_to_txt_file(bottleneck_data):	
+
+	with open('bottleneck_data.txt', 'wt') as f:
+		for key in bottleneck_data:
+			if key not in {'train','valid','test'}: continue
+			f.write('\n PART {0}:\n'.format(key))			
+			for i in range(len(bottleneck_data[key]['labels'])):
+				f.write('{0}: {1}\n'.format(\
+					bottleneck_data[key]['labels'][i], np.mean(bottleneck_data[key]['images'][i])))
+
 
 
 def input_parser(image_path, label, num_classes):
