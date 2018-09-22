@@ -260,7 +260,7 @@ def make_tf_dataset(filenames_data):
 
 	#dataset = dataset.batch(batch_size)
 
-	do_augmentation = False
+	do_augmentation = True
 	if do_augmentation: 
 		#train_data = distort.augment_dataset(train_data)
 		train_data = distort.augment_dataset(train_data, mult=5)
