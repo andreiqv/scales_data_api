@@ -15,10 +15,16 @@ def augment_dataset(dataset, mult=1):
 		#images = tf.image.random_contrast(images, lower=0.3, upper=1.8)
 		#images = tf.image.random_brightness(images, max_delta=0.3)
 		#images = tf.image.random_saturation(images, lower=0.0, upper=2.0)
-		images = tf.image.random_hue(images, max_delta=0.02)
-		images = tf.image.random_contrast(images, lower=0.5, upper=1.5)
-		images = tf.image.random_brightness(images, max_delta=0.2)
-		images = tf.image.random_saturation(images, lower=0.5, upper=1.5)
+
+		#images = tf.image.random_hue(images, max_delta=0.02)
+		#images = tf.image.random_contrast(images, lower=0.5, upper=1.5)
+		#images = tf.image.random_brightness(images, max_delta=0.2)
+		#images = tf.image.random_saturation(images, lower=0.5, upper=1.5)
+
+		images = tf.image.random_hue(images, max_delta=0.01)
+		images = tf.image.random_contrast(images, lower=0.8, upper=1.2)
+		images = tf.image.random_brightness(images, max_delta=0.1)
+		images = tf.image.random_saturation(images, lower=0.8, upper=1.2)
 
 		images = tf.minimum(images, 1.0)
 		images = tf.maximum(images, 0.0)		
