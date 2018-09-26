@@ -308,6 +308,9 @@ if __name__ == '__main__':
 
 			# SAVE GRAPH TO PB
 			graph = sess.graph			
+
+			tf.graph_util.remove_training_nodes(graph)
+
 			#tf.contrib.quantize.create_eval_graph(graph)
 			# tf.contrib.quantize.create_training_graph()
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
