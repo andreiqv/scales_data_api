@@ -309,7 +309,7 @@ if __name__ == '__main__':
 			# SAVE GRAPH TO PB
 			graph = sess.graph			
 
-			tf.graph_util.remove_training_nodes(graph)
+			tf.graph_util.remove_training_nodes(graph.as_graph_def())
 
 			#tf.contrib.quantize.create_eval_graph(graph)
 			# tf.contrib.quantize.create_training_graph()
