@@ -47,11 +47,13 @@ def inference(image_file, pb_file):
 				#sess.graph.as_default() #new line
 
 				# Import a graph_def into the current default Graph
-				use_hub_model = False
+				use_hub_model = True
 				if use_hub_model:
-					input_output_placeholders = ['Placeholder:0', 'final_result:0']
+					input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
+					#input_output_placeholders = ['Placeholder:0', 'final_result:0']
 				else:
-					input_output_placeholders = ['Placeholder-x:0', 'reluF1:0']
+					input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
+					#input_output_placeholders = ['Placeholder-x:0', 'reluF1:0']
 					#input_output_placeholders = ['Placeholder-x:0', 'reluF2:0']
 					#input_output_placeholders = ['Placeholder-x:0', 'Mean:0']
 
@@ -77,7 +79,7 @@ def createParser ():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-i', '--input', default="images/100.jpg", type=str,\
 		help='input')
-	parser.add_argument('-pb', '--pb', default="saved_model.pb", type=str,\
+	parser.add_argument('-pb', '--pb', default="../saved_model.pb", type=str,\
 		help='input')
 	parser.add_argument('-o', '--output', default="logs/1/", type=str,\
 		help='output')
