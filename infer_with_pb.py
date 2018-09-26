@@ -79,7 +79,7 @@ def createParser ():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-i', '--input', default="images/100.jpg", type=str,\
 		help='input')
-	parser.add_argument('-pb', '--pb', default="../saved_model.pb", type=str,\
+	parser.add_argument('-pb', '--pb', default="saved_model.pb", type=str,\
 		help='input')
 	parser.add_argument('-o', '--output', default="logs/1/", type=str,\
 		help='output')
