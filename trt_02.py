@@ -3,7 +3,8 @@ import uff
 import tensorrt as trt
 from tensorrt.parsers import uffparser
 
-use_hub_model = False:
+use_hub_model = False
+
 if use_hub_model:
 	FROZEN_FPATH = '/home/andrei/Data/Datasets/Scales/pb/output_graph.pb'
 	ENGINE_FPATH = '/home/andrei/Data/Datasets/Scales/pb/hub_model_engine.plan'
