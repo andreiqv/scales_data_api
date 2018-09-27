@@ -17,6 +17,36 @@ np.set_printoptions(precision=4, suppress=True)
 
 from layers import *
 
+HIDDEN_NUM_DEFAULT = 8
+
+#
+
+
+# add a final layer (or a few layers)
+
+def network1(input_tensor, input_size, output_size):
+
+	f1 = fullyConnectedLayer(
+		input_tensor, input_size=input_size, num_neurons=output_size, 
+		func=tf.nn.sigmoid, name='_out') # func=tf.nn.relu
+	
+	return f1
+
+
+def network2(input_tensor, input_size, output_size, hidden_num=HIDDEN_NUM_DEFAULT):
+
+	f1 = fullyConnectedLayer(
+		input_tensor, input_size=input_size, num_neurons=hidden_num, 
+		func=tf.nn.relu, name='F1') # func=tf.nn.relu
+	
+	drop1 = tf.layers.dropout(inputs=f1, rate=0.4)	
+	
+	f2 = fullyConnectedLayer(drop1, input_size=hidden_num, num_neurons=output_size, 
+		func=tf.nn.sigmoid, name='_out')
+
+	return f2
+
+#
 
 def perceptron(x, shape, output_size):
 

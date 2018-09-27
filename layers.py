@@ -45,7 +45,7 @@ def convPoolLayer(p_in, kernel, pool_size, num_in, num_out, func=None, name=''):
 	return p_out
 
 def fullyConnectedLayer(p_in, input_size, num_neurons, func=None, name=''):
-	num_neurons_6 = 128
+	#num_neurons_6 = 128
 	W = weight_variable([input_size, num_neurons], name='W'+name)
 	b = bias_variable([num_neurons], name='b'+name)
 	if func:
@@ -54,4 +54,5 @@ def fullyConnectedLayer(p_in, input_size, num_neurons, func=None, name=''):
 		h = tf.matmul(p_in, W) + b
 	print('h{0} = {1}'.format(name, h))
 	return h
+
 

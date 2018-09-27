@@ -45,29 +45,6 @@ else:
 """
 #------------------------
 
-# add a final layer (or a few layers)
-
-def network1(input_tensor, input_size, output_size):
-
-	f1 = fullyConnectedLayer(
-		input_tensor, input_size=bottleneck_tensor_size, num_neurons=output_size, 
-		func=tf.nn.sigmoid, name='_out') # func=tf.nn.relu
-	
-	return f1
-
-
-def network2(input_tensor, input_size, output_size, hidden_num=HIDDEN_NUM):
-
-	f1 = fullyConnectedLayer(
-		input_tensor, input_size=bottleneck_tensor_size, num_neurons=hidden_num, 
-		func=tf.nn.relu, name='F1') # func=tf.nn.relu
-	
-	drop1 = tf.layers.dropout(inputs=f1, rate=0.4)	
-	
-	f2 = fullyConnectedLayer(drop1, input_size=hidden_num, num_neurons=output_size, 
-		func=tf.nn.sigmoid, name='_out')
-
-	return f2
 
 
 
@@ -96,7 +73,7 @@ if __name__ == '__main__':
 	data_file = arguments.in_file
 
 	if arguments.k == 1:	
-		neural_network = network1
+		last_layers = network1
 		output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
 		neural_network = network2
@@ -169,6 +146,8 @@ if __name__ == '__main__':
 
 		# 1. Construct a graph representing the model.
 
+		#is_train = tf.Variable(True)
+
 		shape = SHAPE
 		height, width, color =  shape
 		#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
@@ -177,24 +156,38 @@ if __name__ == '__main__':
 
 		if use_hub:
 			print('*************')
-			module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1")
+			module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1", 
+				trainable=False)
 			print(module._graph)
 	
 		bottleneck_tensor = module(resized_input_tensor)
 
+		"""
+		def f_true():
+			return tf.stop_gradient(bottleneck_tensor)
+		def f_false():
+			return bottleneck_tensor
+		bottleneck_tensor_stop = tf.cond(is_train, f_true, f_false)
+		"""
+
+		"""
+		bottleneck_tensor_stop = tf.cond(is_train,
+                     lambda: tf.stop_gradient(bottleneck_tensor),
+                     lambda: bottleneck_tensor)
+		"""
 		bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
 		#x = tf.placeholder(tf.float32, [None, 1, bottleneck_tensor_size], name='Placeholder-x') # Placeholder for input.
 		bottleneck_input = tf.placeholder_with_default(
 			bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
 		#bottleneck_input = tf.reshape(bottleneck_input, [-1, bottleneck_tensor_size])
-		output = neural_network(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
+		output = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
 		print('output =', output)	
 		logits = output
 
 		#tf.contrib.quantize.create_training_graph()
 
-		y = tf.placeholder(tf.float32, [None, NUM_CLASSES], name='Placeholder-y')   # Placeholder for labels.		
+		y = tf.placeholder(tf.float32, [None, NUM_CLASSES], name='Placeholder-y')   # Placeholder for labels.
 
 		# 2. Add nodes that represent the optimization algorithm.
 		# for regression:
@@ -228,6 +221,8 @@ if __name__ == '__main__':
 
 			if arguments.restore:
 				tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
+
+			print('is_train=', is_train.eval())
 
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
@@ -272,7 +267,7 @@ if __name__ == '__main__':
 				y_data = train['labels'][a1:a2]
 				if len(x_data) <= 0: continue
 				#sess.run(train_op, {x: x_data, y: y_data})  # Perform one training iteration.		
-				sess.run(train_op, {bottleneck_input: x_data, y: y_data})  # Perform one training iteration.						
+				sess.run(train_op, {bottleneck_input: x_data, y: y_data})  # Perform one training iteration.
 				
 
 			# Save the comp. graph
@@ -308,17 +303,16 @@ if __name__ == '__main__':
 
 			# SAVE GRAPH TO PB
 			graph = sess.graph			
-
+			#op = is_train.assign(False)
+			#sess.run(op)
 			tf.graph_util.remove_training_nodes(graph.as_graph_def())
-
-			#tf.contrib.quantize.create_eval_graph(graph)
+			# tf.contrib.quantize.create_eval_graph(graph)
 			# tf.contrib.quantize.create_training_graph()
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
 				sess, graph.as_graph_def(), output_node_names)
-
 			dir_for_model = '.'
 			tf.train.write_graph(output_graph_def, dir_for_model,
-				'saved_model.pb', as_text=False)	
+				'saved_model_full.pb', as_text=False)	
 
 			# it doesn't work. I don't know why.
 			#graph_file_name = 'saved_model_gf.pb'			
