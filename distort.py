@@ -5,7 +5,7 @@ import tensorflow as tf
 def augment_dataset(dataset, mult=1):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
-	dataset = dataset.shuffle(60000).repeat(mult)
+	dataset = dataset.shuffle(3000).repeat(mult)
 
 	def _random_distord(images, labels):
 

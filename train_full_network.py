@@ -295,7 +295,7 @@ def train_and_save_model(dataset, shape):
 
 	print('bottleneck_tensor:', bottleneck_tensor)
 
-	NUM_CLASSES = 6
+	NUM_CLASSES = 112
 
 	print('NUM_CLASSES =', NUM_CLASSES)
 	logits = last_layers(bottleneck_tensor, bottleneck_tensor_size, NUM_CLASSES)
