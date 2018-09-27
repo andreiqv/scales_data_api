@@ -321,7 +321,7 @@ def train_and_save_model(dataset, shape):
 		sess.run(tf.global_variables_initializer())
 
 
-		NUM_EPOCH = 2
+		NUM_EPOCH = 100
 		for epoch in range(NUM_EPOCH):
 			print('\nEPOCH {0}'.format(epoch))			
 
