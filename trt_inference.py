@@ -58,4 +58,4 @@ if __name__ == '__main__':
 
 	output = engine.infer(img)
 	#inference(engine, img)
-	print(output)
+	print(list(output))
