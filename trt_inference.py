@@ -1,5 +1,6 @@
 import tensorflow as tf
 import tensorrt as trt
+import numpy as np
 import scipy.misc
 import utils
 
