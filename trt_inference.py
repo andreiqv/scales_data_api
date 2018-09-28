@@ -3,6 +3,7 @@ import tensorrt as trt
 import numpy as np
 import scipy.misc
 import utils
+import timer
 
 
 NUM_CLASSES = 112
@@ -56,6 +57,8 @@ if __name__ == '__main__':
 	image_path = 'images/1.jpg'	
 	img = prepare_image(image_path)
 
+	timer('start')
 	output = engine.infer(img)
+	timer()
 	#inference(engine, img)
-	print(list(output))
+	#print(output)
