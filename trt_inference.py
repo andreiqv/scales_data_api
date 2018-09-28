@@ -1,6 +1,9 @@
 import tensorflow as tf
 import tensorrt as trt
-#import utils
+import utils
+
+NUM_CLASSES = 112
+CLASSES = [str(i) for i in range(NUM_CLASSES)] # ADJUST
 
 #import uff
 #from tensorrt.parsers import uffparser
@@ -26,4 +29,30 @@ else:
 MAX_BATCH_SIZE = 1
 MAX_WORKSPACE = 1 << 20
 
-engine = trt.lite.Engine(PLAN=ENGINE_FPATH)
+CROP_SIZE = tuple(INPUT_SIZE[1:])
+
+
+
+def prepare_image(image_path):
+
+	img_in = scipy.misc.imread(image_path, mode='RGB')	
+	img = img_in.astype(np.float32)
+	img = utils.resize_and_crop(img, crop_size)
+	img = img.transpose(2, 0, 1)
+	return img
+
+
+#def inference(engine, img):
+#	output = engine.infer(img)
+
+
+if __name__ == '__main__':
+
+	engine = trt.lite.Engine(PLAN=ENGINE_FPATH)
+
+	image_path = 'images/1.jpg'	
+	img = prepare_image(image_path)
+
+	output = engine.infer(img)
+	#inference(engine, img)
+	print(output)
