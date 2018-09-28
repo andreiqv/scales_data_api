@@ -40,7 +40,7 @@ def prepare_image(image_path):
 
 	img_in = scipy.misc.imread(image_path, mode='RGB')	
 	img = img_in.astype(np.float32)
-	img = utils.resize_and_crop(img, crop_size)
+	img = utils.resize_and_crop(img, CROP_SIZE)
 	img = img.transpose(2, 0, 1)
 	return img
 
