@@ -1,6 +1,8 @@
 import tensorflow as tf
 import tensorrt as trt
+import scipy.misc
 import utils
+
 
 NUM_CLASSES = 112
 CLASSES = [str(i) for i in range(NUM_CLASSES)] # ADJUST
