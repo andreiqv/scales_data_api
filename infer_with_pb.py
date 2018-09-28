@@ -6,6 +6,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.python.platform import gfile
 from PIL import Image
+import timer
 
 
 def inference(image_file, pb_file):
@@ -61,10 +62,14 @@ def inference(image_file, pb_file):
 				input_, predictions =  tf.import_graph_def(graph_def, name='', 
 					return_elements=input_output_placeholders)
 
+				timer.timer('----')
+
 				print("predictions.eval")
 				p_val = predictions.eval(feed_dict={input_: [image_arr]})
 				index = np.argmax(p_val)
 				label = labels[index]
+
+				timer.timer()
 
 				print(p_val)
 				print(np.max(p_val))
@@ -77,9 +82,9 @@ def createParser ():
 	"""ArgumentParser
 	"""
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-i', '--input', default="images/100.jpg", type=str,\
+	parser.add_argument('-i', '--input', default="images/1.jpg", type=str,\
 		help='input')
-	parser.add_argument('-pb', '--pb', default="saved_model.pb", type=str,\
+	parser.add_argument('-pb', '--pb', default="saved_model_full.pb", type=str,\
 		help='input')
 	parser.add_argument('-o', '--output', default="logs/1/", type=str,\
 		help='output')
