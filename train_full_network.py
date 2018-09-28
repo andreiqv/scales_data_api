@@ -31,7 +31,7 @@ last_layers = network.network1
 #DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
-
+CHECKPOINT_NAME = 'full_model'
 
 np.set_printoptions(precision=4, suppress=True)
 
@@ -371,6 +371,8 @@ def train_and_save_model(dataset, shape):
 					print("End of validation dataset.")
 					break
 
+		saver = tf.train.Saver()		
+		saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 
 		# SAVE GRAPH TO PB
 		graph = sess.graph			
