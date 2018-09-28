@@ -57,8 +57,8 @@ if __name__ == '__main__':
 	image_path = 'images/1.jpg'	
 	img = prepare_image(image_path)
 
-	timer('start')
+	timer.timer('start')
 	output = engine.infer(img)
-	timer()
+	timer.timer()
 	#inference(engine, img)
 	#print(output)
