@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorrt as trt
-import utils
+#import utils
 
 #import uff
 #from tensorrt.parsers import uffparser
