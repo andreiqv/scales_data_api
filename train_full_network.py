@@ -286,7 +286,8 @@ def train_and_save_model(dataset, shape):
 		
 	if use_hub:
 		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1", 
-			trainable=False)
+			trainable=True)
+			#trainable=False)
 		print(module._graph)
 	else:
 		module = model.module
@@ -363,7 +364,7 @@ def train_and_save_model(dataset, shape):
 					print('valid batch', i)
 					batch = sess.run(next_element)
 					valid_acc = accuracy.eval(feed_dict={x: batch[0], y: batch[1]})
-					print('epoch={0} i={1} train_acc={2:.4f}'.format(epoch, i, valid_acc))
+					print('epoch={0} i={1} valid_acc={2:.4f}'.format(epoch, i, valid_acc))
 					#print('i={0} valid_acc={1:.4f}'.format(i, valid_acc))
 
 				except tf.errors.OutOfRangeError:
