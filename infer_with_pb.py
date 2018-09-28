@@ -68,12 +68,24 @@ def inference(image_file, pb_file):
 				p_val = predictions.eval(feed_dict={input_: [image_arr]})
 				index = np.argmax(p_val)
 				label = labels[index]
-
-				print(p_val)
-				print(np.max(p_val))
-				print('index={0}, label={1}'.format(index, label))
-
+				#print(p_val)
+				#print(np.max(p_val))
+				#print('index={0}, label={1}'.format(index, label))
 				timer.timer()
+
+
+				print("predictions.eval")
+				p_val = predictions.eval(feed_dict={input_: [image_arr]})
+				index = np.argmax(p_val)
+				label = labels[index]
+				timer.timer()
+
+				print("predictions.eval")
+				p_val = predictions.eval(feed_dict={input_: [image_arr]})
+				index = np.argmax(p_val)
+				label = labels[index]
+				timer.timer()
+
 
 				return label
 
