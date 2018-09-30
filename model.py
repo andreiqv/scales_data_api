@@ -13,7 +13,7 @@ if not use_hub:
 
 	bottleneck_tensor_size =  588 #1536
 	BATCH_SIZE = 4
-	DISPLAY_INTERVAL, NUM_ITERS = 10, 500	
+	DISPLAY_INTERVAL, NUM_ITERS = 10, 100
 
 else:
 	#data_dir = '/home/andrei/Data/Datasets/Scales/data'

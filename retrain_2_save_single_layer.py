@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """ 
-25.09.2018
-Add 1 or 2 layers to hub.model and retrain it.
-Save whole graph to pb-file.
-But problem is that the graph contains placeholderWithDefault 
-which doesn't is not supported by tensorrt.
-
+01.10.2018
+In this version we add to hub-model only single layer (as an object of class SingleLayerNeuralNetwork
+and we save all variables
+but restore only for this layer.
 """
 
 # export CUDA_VISIBLE_DEVICES=1
@@ -28,6 +26,7 @@ import tensorflow as tf
 
 #from rotate_images import *
 from layers import *
+import networks
 
 HIDDEN_NUM = 8
 CHECKPOINT_NAME = 'my_test_model'
@@ -77,10 +76,10 @@ if __name__ == '__main__':
 	data_file = arguments.in_file
 
 	if arguments.k == 1:	
-		last_layers = network1
+		last_layers = networks.network1
 		output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
-		neural_network = network2
+		neural_network = networks.network2
 		output_node_names = ['sigmoid_out']
 	else:
 		raise Exception('Bad argument arguments.k')
@@ -185,7 +184,16 @@ if __name__ == '__main__':
 		bottleneck_input = tf.placeholder_with_default(
 			bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
 		#bottleneck_input = tf.reshape(bottleneck_input, [-1, bottleneck_tensor_size])
-		output = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
+		
+		#output = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
+		single_layer_nn = networks.SingleLayerNeuralNetwork(
+			input_size=bottleneck_tensor_size, 
+			num_neurons=NUM_CLASSES,
+			func=tf.nn.sigmoid,
+			name='_out')
+		output = single_layer_nn.module(bottleneck_input)
+
+
 		print('output =', output)	
 		logits = output
 
@@ -223,10 +231,12 @@ if __name__ == '__main__':
 			init = tf.global_variables_initializer()
 			sess.run(init)	# Randomly initialize weights.
 
-			if arguments.restore:
-				tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
+			if arguments.restore:				
+				single_layer_nn.restore(sess)
+				if False:
+					tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
 
-			print('is_train=', is_train.eval())
+			#print('is_train=', is_train.eval())
 
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
@@ -300,10 +310,12 @@ if __name__ == '__main__':
 			print('test_loss={0:0.4f}'.format(test_loss))				
 			"""
 
-			# Saver			
-			saver = tf.train.Saver()		
-			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
-	
+			# Save model
+			single_layer_nn.save(sess)
+
+			if False:
+				saver = tf.train.Saver()		
+				saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 
 			# SAVE GRAPH TO PB
 			graph = sess.graph			

@@ -46,7 +46,43 @@ def network2(input_tensor, input_size, output_size, hidden_num=HIDDEN_NUM_DEFAUL
 
 	return f2
 
-#
+
+#---------------------
+# Neural network as a class:
+
+class SingleLayerNeuralNetwork:	
+
+	def __init__(self, input_size, num_neurons, func=None, name=''):
+
+		self.W = weight_variable([input_size, num_neurons], name='W_small_nn')
+		self.b = bias_variable([num_neurons], name='b_small_nn')
+
+		self.name = name
+		self.func = func
+		self.checkpoint = "./save_model/single_layer_nn.ckpt"
+		
+	def module(self, x):
+
+		h = tf.matmul(x, self.W) + self.b
+
+		if self.func:
+			h = self.func(h, name='sigmoid_out')
+
+		return h
+
+	def save(self, sess):
+
+		saver = tf.train.Saver()
+		saver.save(sess, self.checkpoint)
+		return True
+
+	def restore(self, sess):
+
+		saver = tf.train.Saver({'W_small_nn': self.W, 'b_small_nn': self.b})
+		saver.restore(sess, self.checkpoint)
+
+#==============================
+# other models:
 
 def perceptron(x, shape, output_size):
 
