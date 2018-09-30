@@ -54,8 +54,8 @@ class SingleLayerNeuralNetwork:
 
 	def __init__(self, input_size, num_neurons, func=None, name=''):
 
-		self.W = weight_variable([input_size, num_neurons], name='W_small_nn')
-		self.b = bias_variable([num_neurons], name='b_small_nn')
+		self.W = weight_variable([input_size, num_neurons], name='W_single_layer_nn')
+		self.b = bias_variable([num_neurons], name='b_single_layer_nn')
 
 		self.name = name
 		self.func = func

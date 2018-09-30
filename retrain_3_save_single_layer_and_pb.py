@@ -58,7 +58,7 @@ def createParser ():
 	"""
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-r', '--restore', dest='restore', action='store_true')
-	parser.add_argument('-e', '--eval', dest='is_eval', action='store_true')
+	parser.add_argument('-ev', '--eval', dest='is_eval', action='store_true')
 	#parser.add_argument('-t', '--is_train', dest='is_train', action='store_true')
 	parser.add_argument('-i', '--in_file', default="dump.gz", type=str,\
 		help='input dir')

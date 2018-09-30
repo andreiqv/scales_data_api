@@ -14,8 +14,8 @@ if use_hub_model:
 else:
 	#FROZEN_FPATH = '/root/tmp/saved_model_inception_resnet.pb'
 	#ENGINE_FPATH = '/root/tmp/engine.plan'
-	FROZEN_FPATH = 'saved_model_full.pb'
-	ENGINE_FPATH = 'saved_model_full.plan'
+	FROZEN_FPATH = 'saved_model_full_2.pb'
+	ENGINE_FPATH = 'saved_model_full_2.plan'
 	INPUT_NODE = 'Placeholder-x'
 	OUTPUT_NODE = 'sigmoid_out'
 	INPUT_SIZE = [3, 299, 299]
