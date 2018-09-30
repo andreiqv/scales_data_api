@@ -21,7 +21,7 @@ import tensorflow as tf
 Dataset = tf.data.Dataset
 Iterator = tf.data.Iterator
 
-import network
+#import networks
 import split_data
 import distort
 

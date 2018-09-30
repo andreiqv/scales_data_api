@@ -25,33 +25,40 @@ def max_pool_2x2(x, name=None):
 def max_pool_3x3(x, name=None):
 	return tf.nn.max_pool(x, ksize=[1,3,3,1], strides=[1,3,3,1], padding='SAME',  name=name)
 
+#-------------
 
 def convPoolLayer(p_in, kernel, pool_size, num_in, num_out, func=None, name=''):
+	
 	W = weight_variable([kernel[0], kernel[1], num_in, num_out], name='W'+name)  # 32 features, 5x5
 	b = bias_variable([num_out], name='b'+name)
-	
-	if func:
-		h = func(conv2d(p_in, W, name='conv'+name) + b, name='relu'+name)
-	else:
-		h = conv2d(p_in, W, name='conv'+name) + b
 
-	if pool_size == 2:
+	h = conv2d(p_in, W, name='conv'+name) + b
+
+	if func:
+		h = func(h, name='relu'+name)
+
+	if pool_size == 1:
+		p_out = h
+	elif pool_size == 2:
 		p_out = max_pool_2x2(h, name='pool'+name)
 	elif pool_size == 3:
 		p_out = max_pool_3x3(h, name='pool'+name)
 	else:
-		raise("bad pool size")
+		raise("the pool size = {0} is not supported".format(pool_size))
+	
 	print('p{0} = {1}'.format(name, p_out))
+
 	return p_out
 
 def fullyConnectedLayer(p_in, input_size, num_neurons, func=None, name=''):
 	#num_neurons_6 = 128
 	W = weight_variable([input_size, num_neurons], name='W'+name)
 	b = bias_variable([num_neurons], name='b'+name)
+	h = tf.matmul(p_in, W) + b
+
 	if func:
-		h = func(tf.matmul(p_in, W) + b, name=func.__name__ + name)
-	else:
-		h = tf.matmul(p_in, W) + b
+		h = func(h, name=func.__name__ + name)
+
 	print('h{0} = {1}'.format(name, h))
 	return h
 

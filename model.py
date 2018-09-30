@@ -1,6 +1,6 @@
 import os.path
 
-import network
+import networks
 
 use_hub = os.path.exists('.use_hub')
 
@@ -8,7 +8,7 @@ if not use_hub:
 	#data_dir = '../data'
 	data_dir = '../separated'
 
-	module = network.conv_network_224
+	module = networks.conv_network_224
 	SHAPE = 224, 224, 3
 
 	bottleneck_tensor_size =  588 #1536
