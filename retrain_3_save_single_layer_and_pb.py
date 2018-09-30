@@ -58,6 +58,8 @@ def createParser ():
 	"""
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-r', '--restore', dest='restore', action='store_true')
+	parser.add_argument('-e', '--eval', dest='is_eval', action='store_true')
+	#parser.add_argument('-t', '--is_train', dest='is_train', action='store_true')
 	parser.add_argument('-i', '--in_file', default="dump.gz", type=str,\
 		help='input dir')
 	parser.add_argument('-k', '--k', default=1, type=int,\
@@ -75,6 +77,7 @@ if __name__ == '__main__':
 	parser = createParser()
 	arguments = parser.parse_args(sys.argv[1:])			
 	data_file = arguments.in_file
+	is_train = not arguments.is_eval
 
 	print('data_file =', data_file)
 	f = gzip.open(data_file, 'rb')
@@ -140,40 +143,27 @@ if __name__ == '__main__':
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 
 		if use_hub:
-			print('*************')
 			module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1", 
 				trainable=False)
-			print(module._graph)
 	
 		bottleneck_tensor = module(resized_input_tensor)
 
-		"""
-		def f_true():
-			return tf.stop_gradient(bottleneck_tensor)
-		def f_false():
-			return bottleneck_tensor
-		bottleneck_tensor_stop = tf.cond(is_train, f_true, f_false)
-		"""
+		if is_train:
+			bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
-		"""
-		bottleneck_tensor_stop = tf.cond(is_train,
-                     lambda: tf.stop_gradient(bottleneck_tensor),
-                     lambda: bottleneck_tensor)
-		"""
-		bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
-
-		#x = tf.placeholder(tf.float32, [None, 1, bottleneck_tensor_size], name='Placeholder-x') # Placeholder for input.
-		bottleneck_input = tf.placeholder_with_default(
-			bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
-		#bottleneck_input = tf.reshape(bottleneck_input, [-1, bottleneck_tensor_size])
+			bottleneck_input = tf.placeholder_with_default(
+				bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
 		
-		#output = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
+		else:
+			bottleneck_input = bottleneck_tensor
+
+	
 		single_layer_nn = networks.SingleLayerNeuralNetwork(
 			input_size=bottleneck_tensor_size, 
 			num_neurons=NUM_CLASSES,
 			func=tf.nn.sigmoid,
 			name='_out')
-		
+
 		output = single_layer_nn.module(bottleneck_input)
 
 
@@ -214,7 +204,7 @@ if __name__ == '__main__':
 			init = tf.global_variables_initializer()
 			sess.run(init)	# Randomly initialize weights.
 
-			if arguments.restore:				
+			if arguments.restore or (not is_train):		
 				single_layer_nn.restore(sess)
 				if False:
 					tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
@@ -254,10 +244,15 @@ if __name__ == '__main__':
 					print('epoch {0:2} (i={1:06}): train={2:0.4f}, valid={3:0.4f} (max={4:0.4f}) [top5={5:0.4f}, top6={6:0.4f}]'.\
 						format(epoch, iteration, train_acc, valid_acc, min_valid_acc, valid_acc_top5, valid_acc_top6))
 
-					if epoch % 200 == 0:	
-						saver = tf.train.Saver()		
-						saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
-				
+					if False:
+						if epoch % 200 == 0:	
+							saver = tf.train.Saver()		
+							saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
+					
+
+				if not is_train: break
+
+				# RUN OPTIMAIZER:
 				a1 = iteration*BATCH_SIZE % train['size']
 				a2 = (iteration + 1)*BATCH_SIZE % train['size']
 				x_data = train['images'][a1:a2]
@@ -294,24 +289,28 @@ if __name__ == '__main__':
 			"""
 
 			# Save model
-			single_layer_nn.save(sess)
-
 			if False:
 				saver = tf.train.Saver()		
 				saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 
-			# SAVE GRAPH TO PB
-			graph = sess.graph			
-			#op = is_train.assign(False)
-			#sess.run(op)
-			tf.graph_util.remove_training_nodes(graph.as_graph_def())
-			# tf.contrib.quantize.create_eval_graph(graph)
-			# tf.contrib.quantize.create_training_graph()
-			output_graph_def = tf.graph_util.convert_variables_to_constants(
-				sess, graph.as_graph_def(), output_node_names)
-			dir_for_model = '.'
-			tf.train.write_graph(output_graph_def, dir_for_model,
-				'saved_model_full.pb', as_text=False)	
+			if is_train:
+				# save to checkpoint
+				single_layer_nn.save(sess)
+
+			else:
+				# SAVE GRAPH TO PB
+				graph = sess.graph			
+				#op = is_train.assign(False)
+				#sess.run(op)
+				tf.graph_util.remove_training_nodes(graph.as_graph_def())
+				# tf.contrib.quantize.create_eval_graph(graph)
+				# tf.contrib.quantize.create_training_graph()
+				output_graph_def = tf.graph_util.convert_variables_to_constants(
+					sess, graph.as_graph_def(), output_node_names)
+				dir_for_model = '.'
+				tf.train.write_graph(output_graph_def, dir_for_model,
+					'saved_model_full.pb', as_text=False)	
+
 
 			# it doesn't work. I don't know why.
 			#graph_file_name = 'saved_model_gf.pb'			
