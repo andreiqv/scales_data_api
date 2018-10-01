@@ -119,7 +119,7 @@ if __name__ == '__main__':
 	graph_def = get_frozen_graph(pb_file)
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
-	index = inference_with_graph(image_arr, graph_def)
 
-	label = labels[index]
-	print(label)
+	for _ in range(5):
+		index = inference_with_graph(image_arr, graph_def)
+		print('label: ', labels[index])
