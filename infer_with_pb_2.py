@@ -110,7 +110,7 @@ def inference_with_graph(graph_def, image, labels):
 				time_res.append(0)
 				#print('index={0}, label={1}'.format(index, label))
 
-			print('mean time = {0}'.format(np.mean(time_res.mean)))
+			print('mean time = {0}'.format(np.mean(time_res)))
 
 			return index
 
