@@ -139,12 +139,12 @@ if __name__ == '__main__':
 	graph_def = get_frozen_graph(pb_file)
 
 	modes = ['FP32', 'FP16', 0]
-	precision_mode = modes[2]	
+	#precision_mode = modes[2]
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
-	for m in modes*2:
+	for mode in modes*2:
 		print('\nMODE: {0}'.format(mode))
-		graph_def = compress_graph_with_trt(graph_def, precision_mode)
+		graph_def = compress_graph_with_trt(graph_def, mode)
 		inference_with_graph(graph_def, image, labels)
 		
