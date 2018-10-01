@@ -53,7 +53,9 @@ def prepare_image(image_path):
 if __name__ == '__main__':
 
 	engine = trt.lite.Engine(
-		PLAN=ENGINE_FPATH)
+		PLAN=ENGINE_FPATH,
+		data_type=trt.infer.DataType.INT8,
+		calibrator=int8_calibrator)
 
 	image_path = 'images/1.jpg'	
 	img = prepare_image(image_path)
