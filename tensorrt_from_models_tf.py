@@ -17,7 +17,6 @@
 Please note that all of these methods are in development, and subject to
 rapid change.
 """
-
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -47,7 +46,7 @@ _GRAPH_FILE = "frozen_graph.pb"
 ################################################################################
 # Prep the image input to the graph.
 ################################################################################
-def preprocess_image(file_name, output_height=299, output_width=299,
+def preprocess_image(file_name, output_height=224, output_width=224,
                      num_channels=3):
   """Run standard ImageNet preprocessing on the passed image file.
 
@@ -83,7 +82,7 @@ def preprocess_image(file_name, output_height=299, output_width=299,
   return result[0]
 
 
-def batch_from_image(file_name, batch_size, output_height=299, output_width=299,
+def batch_from_image(file_name, batch_size, output_height=224, output_width=224,
                      num_channels=3):
   """Produce a batch of data from the passed image file.
 
@@ -105,7 +104,7 @@ def batch_from_image(file_name, batch_size, output_height=299, output_width=299,
   return tiled_array
 
 
-def batch_from_random(batch_size, output_height=299, output_width=299,
+def batch_from_random(batch_size, output_height=224, output_width=224,
                       num_channels=3):
   """Produce a batch of random data.
 

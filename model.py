@@ -1,5 +1,4 @@
 import os.path
-
 import networks
 
 use_hub = os.path.exists('.use_hub')
@@ -44,5 +43,5 @@ else:
 	bottleneck_tensor_size =  1536
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 32
-	DISPLAY_INTERVAL, NUM_ITERS = 1000, 1*1500
+	DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500

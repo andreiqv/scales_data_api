@@ -5,6 +5,11 @@
 In this version we add to hub-model only single layer (as an object of class SingleLayerNeuralNetwork
 and we save all variables
 but restore only for this layer.
+
+no params: just train and save model.
+-ev  - restore variables from saved model, and create a graph without superfluous nodes,
+	and save the graph to pb-file.
+
 """
 
 # export CUDA_VISIBLE_DEVICES=1
