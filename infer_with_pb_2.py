@@ -130,7 +130,7 @@ if __name__ == '__main__':
 	labels = get_labels('labels.txt')
 	graph_def = get_frozen_graph(pb_file)
 
-	graph_def = compress_graph_with_trt(graph_def)
+	#graph_def = compress_graph_with_trt(graph_def)
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
