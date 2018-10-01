@@ -84,7 +84,7 @@ def compress_graph_with_trt(graph_def):
 	return trt_graph
 
 
-def inference_with_graph(image, graph_def):
+def inference_with_graph(graph_def, image, labels):
 
 	with tf.Graph().as_default() as graph:
 
@@ -94,12 +94,15 @@ def inference_with_graph(image, graph_def):
 			print("import graph")	
 			input_, predictions =  tf.import_graph_def(graph_def, name='', 
 				return_elements=input_output_placeholders)
-
+			
 			timer.timer('predictions.eval')
-			p_val = predictions.eval(feed_dict={input_: [image]})
-			index = np.argmax(p_val)
-			#print('index={0}, label={1}'.format(index, label))
-			timer.timer()
+
+			for i in range(10):
+				p_val = predictions.eval(feed_dict={input_: [image]})
+				index = np.argmax(p_val)
+				label = labels[index]
+				timer.timer('{0}: label={1}'.format(i, label))
+				#print('index={0}, label={1}'.format(index, label))
 
 			return index
 
@@ -131,6 +134,6 @@ if __name__ == '__main__':
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
-	for _ in range(5):
-		index = inference_with_graph(image, graph_def)
-		print('label: ', labels[index])
+	for _ in range(2):
+		inference_with_graph(graph_def, image, labels)
+		
