@@ -132,7 +132,7 @@ if __name__ == '__main__':
 	graph_def = get_frozen_graph(pb_file)
 
 	modes = ['FP32', 'FP16', 'INT8']
-	precision_mode = modes[1]
+	precision_mode = modes[0]
 	graph_def = compress_graph_with_trt(graph_def, precision_mode)
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
