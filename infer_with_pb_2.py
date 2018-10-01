@@ -79,7 +79,7 @@ def compress_graph_with_trt(graph_def):
 		graph_def,
 		[output_node],
 		max_batch_size=1,
-		max_workspace_size=2<<20)
+		max_workspace_size_bytes=2<<20)
 
 	return trt_graph
 
