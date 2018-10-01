@@ -12,6 +12,8 @@ from tensorflow.python.platform import gfile
 from PIL import Image
 import timer
 
+import tensorflow.contrib.tensorrt as trt
+
 
 use_hub_model = False
 
@@ -39,15 +41,13 @@ def get_image_as_array(image_file):
 	# Read the image & get statstics
 	image = Image.open(image_file)
 	#img.show()
-	width, height = image.size
-	print(width)
-	print(height)
-	shape = [299, 299]
+	#shape = [299, 299]
+	shape = tuple(INPUT_SIZE[1:])
 	#image = tf.image.resize_images(img, shape, method=tf.image.ResizeMethod.BICUBIC)
 	image = image.resize(shape, Image.ANTIALIAS)
 	image_arr = np.array(image, dtype=np.float32) / 256.0
 
-	return image_arr	
+	return image_arr
 
 
 def get_labels(labels_file):	
@@ -70,26 +70,34 @@ def get_frozen_graph(pb_file):
 	return graph_def
 
 
-def inference_with_graph(image_arr, graph_def):
+
+def compress_graph_with_trt(graph_def):
+
+	output_node = input_output_placeholders[1]
+
+	trt_graph = trt.create_inference_graph(
+		graph_def,
+		[output_node],
+		max_batch_size=1,
+		max_workspace_size=2<<20)
+
+	return trt_graph
+
+
+def inference_with_graph(image, graph_def):
 
 	with tf.Graph().as_default() as graph:
 
 		with tf.Session() as sess:
-
-			# Load the graph in graph_def
-			print("session")
 
 			# Import a graph_def into the current default Graph
 			print("import graph")	
 			input_, predictions =  tf.import_graph_def(graph_def, name='', 
 				return_elements=input_output_placeholders)
 
-			timer.timer('----')
-			print("predictions.eval")
-			p_val = predictions.eval(feed_dict={input_: [image_arr]})
+			timer.timer('predictions.eval')
+			p_val = predictions.eval(feed_dict={input_: [image]})
 			index = np.argmax(p_val)
-			#print(p_val)
-			#print(np.max(p_val))
 			#print('index={0}, label={1}'.format(index, label))
 			timer.timer()
 
@@ -108,18 +116,21 @@ def createParser ():
 		help='output')
 	return parser
 
+
 if __name__ == '__main__':
 
 	parser = createParser()
 	arguments = parser.parse_args(sys.argv[1:])		
 	pb_file = arguments.pb
 
-	image_arr = get_image_as_array(arguments.input)
+	image = get_image_as_array(arguments.input)
 	labels = get_labels('labels.txt')
 	graph_def = get_frozen_graph(pb_file)
+
+	graph_def = compress_graph_with_trt(graph_def)
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
 	for _ in range(5):
-		index = inference_with_graph(image_arr, graph_def)
+		index = inference_with_graph(image, graph_def)
 		print('label: ', labels[index])
