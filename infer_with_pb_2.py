@@ -71,7 +71,7 @@ def get_frozen_graph(pb_file):
 
 
 
-def compress_graph_with_trt(graph_def):
+def compress_graph_with_trt(graph_def, precision_mode):
 
 	output_node = input_output_placeholders[1]
 
@@ -79,7 +79,8 @@ def compress_graph_with_trt(graph_def):
 		graph_def,
 		[output_node],
 		max_batch_size=1,
-		max_workspace_size_bytes=2<<20)
+		max_workspace_size_bytes=2<<20,
+		precision_mode=precision_mode)
 
 	return trt_graph
 
@@ -130,7 +131,9 @@ if __name__ == '__main__':
 	labels = get_labels('labels.txt')
 	graph_def = get_frozen_graph(pb_file)
 
-	#graph_def = compress_graph_with_trt(graph_def)
+	modes = ['FP32', 'FP16', 'INT8']
+	precision_mode = modes[0]
+	graph_def = compress_graph_with_trt(graph_def, precision_mode)
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
