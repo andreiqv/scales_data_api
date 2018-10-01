@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# According to video Нейронные сети_ быстрый инференс на GPU с помощью TensorRT _ Дмитрий Коробченко (NVIDIA) [720p]
+# This version uses tensorflow.contrib.tensorrt
+# see more:
+# https://github.com/tensorflow/models/blob/master/research/tensorrt/tensorrt.py
+# https://devtalk.nvidia.com/default/topic/1031827/jetson-tx2/tensorflow-1-7-with-tensorrt-fails/
 
 import tensorflow as tf
 import tensorrt as trt
