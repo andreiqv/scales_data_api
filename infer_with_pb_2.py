@@ -75,6 +75,9 @@ def compress_graph_with_trt(graph_def, precision_mode):
 
 	output_node = input_output_placeholders[1]
 
+	if precision_mode==0: 
+		return graph_def
+
 	trt_graph = trt.create_inference_graph(
 		graph_def,
 		[output_node],
@@ -98,12 +101,16 @@ def inference_with_graph(graph_def, image, labels):
 			
 			timer.timer('predictions.eval')
 
+			time_res = []
 			for i in range(10):
 				p_val = predictions.eval(feed_dict={input_: [image]})
 				index = np.argmax(p_val)
 				label = labels[index]
-				timer.timer('{0}: label={1}'.format(i, label))
+				dt = timer.timer('{0}: label={1}'.format(i, label))
+				time_res.append(0)
 				#print('index={0}, label={1}'.format(index, label))
+
+			print('mean time = {0}'.format(np.mean(time_res.mean)))
 
 			return index
 
@@ -131,12 +138,13 @@ if __name__ == '__main__':
 	labels = get_labels('labels.txt')
 	graph_def = get_frozen_graph(pb_file)
 
-	modes = ['FP32', 'FP16', 'INT8']
-	precision_mode = modes[2]
-	#graph_def = compress_graph_with_trt(graph_def, precision_mode)
+	modes = ['FP32', 'FP16', 0]
+	precision_mode = modes[2]	
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
-	for _ in range(2):
+	for m in modes*2:
+		print('\nMODE: {0}'.format(mode))
+		graph_def = compress_graph_with_trt(graph_def, precision_mode)
 		inference_with_graph(graph_def, image, labels)
 		
