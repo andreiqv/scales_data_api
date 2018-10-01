@@ -17,6 +17,14 @@
 Please note that all of these methods are in development, and subject to
 rapid change.
 """
+
+"""
+python tensorrt.py --frozen_graph=resnetv2_imagenet_frozen_graph.pb \
+  --image_file=image.jpg --native --fp32 --fp16 --int8 --output_dir=/my/output
+
+python3 tensorrt_from_models_tf.py --frozen_graph=saved_model_full.pb --image_file=images/1.jpg --native --fp32 --fp16 --int8 --output_dir=/my/output
+"""
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
