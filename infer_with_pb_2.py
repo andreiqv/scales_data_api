@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
 	modes = ['FP32', 'FP16', 'INT8']
 	precision_mode = modes[2]
-	graph_def = compress_graph_with_trt(graph_def, precision_mode)
+	#graph_def = compress_graph_with_trt(graph_def, precision_mode)
 
 	#pb_file_name = 'saved_model.pb' # output_graph.pb
 
