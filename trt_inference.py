@@ -61,11 +61,10 @@ if __name__ == '__main__':
 	img = prepare_image(image_path)
 
 	timer.timer('start')
-	output = engine.infer(img)
-	timer.timer()
-	output = engine.infer(img)
-	timer.timer()
-	output = engine.infer(img)
-	timer.timer()
+	for _ in range(5):
+		output = engine.infer(img)
+		print(output)
+		timer.timer()
+
 	#inference(engine, img)
-	#print(output)
+	#
