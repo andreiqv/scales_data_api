@@ -42,7 +42,7 @@ elif nn_model == 'yolo':
 	INPUT_NODE = 'Placeholder'
 	OUTPUT_NODE = 'concat_scaled_boxes'
 	INPUT_SIZE = [3, 608, 608]
-	input_output_placeholders = ['Placeholder:0', 'concat_scaled_boxes:0']
+	input_output_placeholders = ['Placeholder', 'concat_scaled_boxes']
 
 else:
 	raise Exception('nn_model is wrong')
@@ -116,10 +116,10 @@ def inference_with_graph(graph_def, image, labels):
 
 			time_res = []
 			for i in range(10):
-				p_val = predictions.eval(feed_dict={input_: [image]})
-				index = np.argmax(p_val)
-				label = labels[index]
-				dt = timer.timer('{0}: label={1}'.format(i, label))
+				output_value = predictions.eval(feed_dict={input_: [image]})
+				#index = np.argmax(p_val)
+				#label = labels[index]
+				dt = timer.timer('{0}: output={1}'.format(i, output_value))
 				time_res.append(0)
 				#print('index={0}, label={1}'.format(index, label))
 
