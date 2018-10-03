@@ -78,7 +78,7 @@ class SingleLayerNeuralNetwork:
 
 	def restore(self, sess):
 
-		saver = tf.train.Saver({'W_small_nn': self.W, 'b_small_nn': self.b})
+		saver = tf.train.Saver({'W_single_layer_nn': self.W, 'b_single_layer_nn': self.b})
 		saver.restore(sess, self.checkpoint)
 
 #==============================

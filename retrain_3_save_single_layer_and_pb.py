@@ -157,11 +157,9 @@ if __name__ == '__main__':
 			bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
 			bottleneck_input = tf.placeholder_with_default(
-				bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
-		
+				bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.		
 		else:
 			bottleneck_input = bottleneck_tensor
-
 	
 		single_layer_nn = networks.SingleLayerNeuralNetwork(
 			input_size=bottleneck_tensor_size, 

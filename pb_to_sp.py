@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# 
+# tensorboard --logdir=logs/5/
 
 import argparse
 import sys
