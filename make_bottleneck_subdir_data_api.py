@@ -28,6 +28,8 @@ import distort
 #DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
+DO_AUGMENTATION = False
+#do_augmentation = False
 
 from model import module, SHAPE, data_dir
 np.set_printoptions(precision=4, suppress=True)
@@ -260,8 +262,7 @@ def make_tf_dataset(filenames_data):
 
 	#dataset = dataset.batch(batch_size)
 
-	do_augmentation = False
-	if do_augmentation: 
+	if DO_AUGMENTATION: 
 		#train_data = distort.augment_dataset(train_data)
 		train_data = distort.augment_dataset(train_data, mult=5)
 

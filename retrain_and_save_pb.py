@@ -28,6 +28,7 @@ import tensorflow as tf
 
 #from rotate_images import *
 from layers import *
+import networks
 
 HIDDEN_NUM = 8
 CHECKPOINT_NAME = 'my_test_model'
@@ -77,10 +78,10 @@ if __name__ == '__main__':
 	data_file = arguments.in_file
 
 	if arguments.k == 1:	
-		last_layers = network1
+		last_layers = networks.network1
 		output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
-		neural_network = network2
+		neural_network = networks.network2
 		output_node_names = ['sigmoid_out']
 	else:
 		raise Exception('Bad argument arguments.k')
