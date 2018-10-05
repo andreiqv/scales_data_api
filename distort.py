@@ -36,7 +36,7 @@ def augment_dataset(dataset, mult=1):
 	return dataset
 
 
-def auпgment_dataset_no_labels(dataset, mult=1):
+def augment_dataset_no_labels(dataset, mult=1):
 	#dataset.train_set = dataset.train_set.shuffle(60000).repeat(5).batch(128)
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
 	dataset = dataset.shuffle(10000).repeat(mult)
