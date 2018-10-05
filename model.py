@@ -19,8 +19,8 @@ if not use_hub:
 else:
 	#data_dir = '/home/andrei/Data/Datasets/Scales/data'
 	#data_dir = '/home/andrei/Data/Datasets/Scales/separated'
-	data_dir = '/home/andrei/Data/Datasets/Scales/separated_cropped'
-	#data_dir = '/home/andrei/Data/Datasets/Scales/tmp'
+	#data_dir = '/home/andrei/Data/Datasets/Scales/separated_cropped'
+	data_dir = '/home/andrei/Data/Datasets/Scales/classsifier_dataset_021018'
 	data_dir = data_dir.rstrip('/')
 
 	import tensorflow_hub as hub
@@ -45,5 +45,5 @@ else:
 	bottleneck_tensor_size =  1536
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 32
-	DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
+	DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*2000
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
