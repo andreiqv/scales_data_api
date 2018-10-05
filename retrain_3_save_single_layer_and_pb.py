@@ -34,7 +34,7 @@ from layers import *
 import networks
 
 HIDDEN_NUM = 8
-CHECKPOINT_NAME = 'my_test_model'
+CHECKPOINT_NAME = 'retrain_3'
 output_node_names = ['sigmoid_out']
 
 #NUM_CLASSES = 412
@@ -312,7 +312,7 @@ if __name__ == '__main__':
 					sess, graph.as_graph_def(), output_node_names)
 				dir_for_model = '.'
 				tf.train.write_graph(output_graph_def, dir_for_model,
-					'saved_model_full.pb', as_text=False)	
+					'saved_model_pure.pb', as_text=False)	
 
 
 			# it doesn't work. I don't know why.
