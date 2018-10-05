@@ -227,7 +227,7 @@ if __name__ == '__main__':
 			if arguments.restore:
 				tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
 
-			print('is_train=', is_train.eval())
+			#print('is_train=', is_train.eval())
 
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
