@@ -21,7 +21,7 @@ import tensorflow as tf
 Dataset = tf.data.Dataset
 Iterator = tf.data.Iterator
 
-import network
+import networks
 import split_data
 import distort
 
@@ -34,7 +34,7 @@ DO_RESIZE = True
 if os.path.exists('.notebook'):
 	#data_dir = '../data'
 	data_dir = '../separated'
-	module = network.conv_network_224
+	module = networks.conv_network_224
 	SHAPE = 224, 224, 3
 else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
