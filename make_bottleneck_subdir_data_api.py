@@ -28,7 +28,7 @@ import distort
 #DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
-DO_AUGMENTATION = True
+DO_AUGMENTATION = 
 #do_augmentation = False
 
 from model import module, SHAPE, data_dir
@@ -266,7 +266,7 @@ def make_tf_dataset(filenames_data):
 
 	if DO_AUGMENTATION: 
 		#train_data = distort.augment_dataset(train_data)
-		train_data = distort.augment_dataset(train_data, mult=5)
+		train_data = distort.augment_dataset(train_data, mult=2)
 
 	batch_size = 16
 	train_data = train_data.batch(batch_size)
