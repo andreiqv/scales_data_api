@@ -28,7 +28,7 @@ import distort
 #DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
-DO_AUGMENTATION = 
+DO_AUGMENTATION = True
 #do_augmentation = False
 
 from model import module, SHAPE, data_dir
