@@ -42,7 +42,7 @@ else:
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/data'
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated'
 	#data_dir = '/home/chichivica/Data/Datasets/Scales/separated_cropped_mult'
-	data_dir = '/home/andrei/Data/Datasets/Scales/classsifier_dataset_021018'
+	data_dir = '~/Data/Datasets/Scales/classsifier_dataset_081018'
 	import tensorflow_hub as hub
 
 	model_number = 3
