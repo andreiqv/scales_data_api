@@ -81,7 +81,7 @@ if __name__ == '__main__':
 		last_layers = networks.network1
 		output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
-		neural_network = networks.network2
+		last_layers = networks.network2
 		output_node_names = ['sigmoid_out']
 	else:
 		raise Exception('Bad argument arguments.k')
