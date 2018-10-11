@@ -32,6 +32,7 @@ import networks
 
 HIDDEN_NUM = 8
 CHECKPOINT_NAME = 'my_test_model'
+PB_FILE_NAME = 'saved_model.pb'
 
 #NUM_CLASSES = 412
 
@@ -78,8 +79,10 @@ if __name__ == '__main__':
 	data_file = arguments.in_file
 
 	if arguments.k == 1:	
-		last_layers = networks.network1
-		output_node_names = ['sigmoid_out']
+		last_layers = networks.network01
+		output_node_names = ['output']
+		#last_layers = networks.network1
+		#output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
 		last_layers = networks.network2
 		output_node_names = ['sigmoid_out']
@@ -156,7 +159,7 @@ if __name__ == '__main__':
 		shape = SHAPE
 		height, width, color =  shape
 		#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
-		x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')		
+		x = tf.placeholder(tf.float32, [None, height, width, 3], name='input')
 		resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
 
 		if use_hub:
@@ -187,8 +190,9 @@ if __name__ == '__main__':
 			bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
 		#bottleneck_input = tf.reshape(bottleneck_input, [-1, bottleneck_tensor_size])
 		output = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
-		print('output =', output)	
-		logits = output
+		print('output =', output)
+		output = tf.identity(output, name='output')
+		logits = output		
 
 		#tf.contrib.quantize.create_training_graph()
 
@@ -303,7 +307,7 @@ if __name__ == '__main__':
 
 			# Saver			
 			saver = tf.train.Saver()		
-			saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
+			saver.save(sess, './saved_model/{0}'.format(CHECKPOINT_NAME))  
 	
 
 			# SAVE GRAPH TO PB
@@ -317,7 +321,7 @@ if __name__ == '__main__':
 				sess, graph.as_graph_def(), output_node_names)
 			dir_for_model = '.'
 			tf.train.write_graph(output_graph_def, dir_for_model,
-				'saved_model_full.pb', as_text=False)	
+				PB_FILE_NAME, as_text=False)	
 
 			# it doesn't work. I don't know why.
 			#graph_file_name = 'saved_model_gf.pb'			

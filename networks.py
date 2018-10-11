@@ -24,6 +24,14 @@ HIDDEN_NUM_DEFAULT = 8
 
 # add a final layer (or a few layers)
 
+def network01(input_tensor, input_size, output_size):
+
+	f1 = fullyConnectedLayer(
+		input_tensor, input_size=input_size, num_neurons=output_size, func=None)
+	
+	return f1
+
+
 def network1(input_tensor, input_size, output_size):
 
 	f1 = fullyConnectedLayer(
