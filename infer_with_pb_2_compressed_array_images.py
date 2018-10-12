@@ -154,7 +154,7 @@ def createParser ():
 		help='input')
 	parser.add_argument('-dir', '--dir', default="images", type=str,\
 		help='input')	
-	parser.add_argument('-pb', '--pb', default="saved_model_full.pb", type=str,\
+	parser.add_argument('-pb', '--pb', default="saved_model.pb", type=str,\
 		help='input')
 	parser.add_argument('-o', '--output', default="logs/1/", type=str,\
 		help='output')
