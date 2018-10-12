@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# ver 1: just use pb-model for inference.
+
 import sys
 import os
 import argparse

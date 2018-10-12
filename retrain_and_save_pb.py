@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """ 
 25.09.2018
+Обучение 1-2 полносвязных слоя на данных из bottleneck.
+
 Add 1 or 2 layers to hub.model and retrain it.
 Save whole graph to pb-file.
 But problem is that the graph contains placeholderWithDefault 
