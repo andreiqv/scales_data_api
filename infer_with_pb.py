@@ -50,7 +50,8 @@ def inference(image_file, pb_file):
 				# Import a graph_def into the current default Graph
 				use_hub_model = True
 				if use_hub_model:
-					input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
+					#input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
+					input_output_placeholders = ['input:0', 'output:0']
 					#input_output_placeholders = ['Placeholder:0', 'final_result:0']
 				else:
 					input_output_placeholders = ['input:0', 'output:0']
