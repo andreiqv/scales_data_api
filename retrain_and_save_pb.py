@@ -35,6 +35,7 @@ import networks
 HIDDEN_NUM = 8
 CHECKPOINT_NAME = 'my_test_model'
 PB_FILE_NAME = 'saved_model.pb'
+OUTPUT_NODE = 'softmax'
 
 #NUM_CLASSES = 412
 
@@ -82,12 +83,12 @@ if __name__ == '__main__':
 
 	if arguments.k == 1:	
 		last_layers = networks.network01
-		output_node_names = ['output']
+		#output_node_names = ['output']
 		#last_layers = networks.network1
 		#output_node_names = ['sigmoid_out']
 	elif arguments.k == 2:	
 		last_layers = networks.network2
-		output_node_names = ['sigmoid_out']
+		#output_node_names = ['sigmoid_out']
 	else:
 		raise Exception('Bad argument arguments.k')
 
@@ -191,10 +192,13 @@ if __name__ == '__main__':
 		bottleneck_input = tf.placeholder_with_default(
 			bottleneck_tensor_stop, shape=[None, bottleneck_tensor_size], name='BottleneckInputPlaceholder') # Placeholder for input.
 		#bottleneck_input = tf.reshape(bottleneck_input, [-1, bottleneck_tensor_size])
-		output = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
-		print('output =', output)
-		output = tf.identity(output, name='output')
-		logits = output		
+		logits = last_layers(bottleneck_input, bottleneck_tensor_size, NUM_CLASSES)
+		print('logits =', logits)
+
+		output = tf.nn.softmax(logits, name=OUTPUT_NODE)
+
+		#output = tf.identity(output, name='logits')
+		#logits = output		
 
 		#tf.contrib.quantize.create_training_graph()
 
@@ -319,6 +323,7 @@ if __name__ == '__main__':
 			tf.graph_util.remove_training_nodes(graph.as_graph_def())
 			# tf.contrib.quantize.create_eval_graph(graph)
 			# tf.contrib.quantize.create_training_graph()
+			output_node_names = [OUTPUT_NODE]
 			output_graph_def = tf.graph_util.convert_variables_to_constants(
 				sess, graph.as_graph_def(), output_node_names)
 			dir_for_model = '.'
