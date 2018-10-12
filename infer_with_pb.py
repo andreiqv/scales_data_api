@@ -53,7 +53,8 @@ def inference(image_file, pb_file):
 					input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
 					#input_output_placeholders = ['Placeholder:0', 'final_result:0']
 				else:
-					input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
+					input_output_placeholders = ['input:0', 'output:0']
+					#input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']
 					#input_output_placeholders = ['Placeholder-x:0', 'reluF1:0']
 					#input_output_placeholders = ['Placeholder-x:0', 'reluF2:0']
 					#input_output_placeholders = ['Placeholder-x:0', 'Mean:0']
