@@ -30,10 +30,15 @@ else:
 	#ENGINE_FPATH = '/root/tmp/engine.plan'
 	FROZEN_FPATH = 'saved_model_full_2.pb'
 	ENGINE_FPATH = 'saved_model_full_2.plan'
-	INPUT_NODE = 'input'
-	OUTPUT_NODE = 'softmax'
+	#INPUT_NODE = 'input'
+	#OUTPUT_NODE = 'softmax'
+	#INPUT_SIZE = [3, 299, 299]
+	#input_output_placeholders = ['input:0', 'softmax:0']
+
+	INPUT_NODE = 'Placeholder-x'
+	OUTPUT_NODE = 'sigmoid_out'
 	INPUT_SIZE = [3, 299, 299]
-	input_output_placeholders = ['input:0', 'softmax:0']
+	input_output_placeholders = ['Placeholder-x:0', 'sigmoid_out:0']	
 
 
 def get_image_as_array(image_file):
