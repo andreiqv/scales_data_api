@@ -28,8 +28,8 @@ import distort
 #DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
-DO_AUGMENTATION = False
-MULT = 0 # how many times to repeat
+DO_AUGMENTATION = True
+MULT = 5 # how many times to repeat
 #do_augmentation = False
 
 from model import module, SHAPE, data_dir
