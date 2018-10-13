@@ -256,7 +256,11 @@ def make_tf_dataset(filenames_data):
 
 
 
-def train_and_save_model(dataset, shape):
+def train_and_save_model(dataset, shape, num_classes):
+	"""
+	shape : [height, width, color] - shape of input images
+	"""
+
 
 	train_data = dataset['train']
 	valid_data = dataset['valid']
@@ -279,8 +283,8 @@ def train_and_save_model(dataset, shape):
 	# 3) Calculate bottleneck in TF
 	height, width, color =  shape
 	#x = tf.placeholder(tf.float32, [None, height, width, 3], name='Placeholder-x')
-	x = tf.placeholder(tf.float32, [None, height, width, 3], name='input')
-	resized_input_tensor = tf.reshape(x, [-1, height, width, 3])
+	x = tf.placeholder(tf.float32, [None, height, width, color], name='input')
+	resized_input_tensor = tf.reshape(x, [-1, height, width, color])
 	#module = hub.Module("https://tfhub.dev/google/imagenet/resnet_v2_152/classification/1")		
 	
 	# num_features = 2048, height x width = 224 x 224 pixels
@@ -297,14 +301,14 @@ def train_and_save_model(dataset, shape):
 	bottleneck_tensor = module(resized_input_tensor)  # Features with shape [batch_size, num_features]	
 
 	print('bottleneck_tensor:', bottleneck_tensor)
+	#print('bottleneck_tensor.get_shape():', bottleneck_tensor.get_shape())
 
 	#NUM_CLASSES = 112
-	NUM_CLASSES = 6
+	print('NUM_CLASSES =', num_classes)
 
-	print('NUM_CLASSES =', NUM_CLASSES)
-	logits = last_layers(bottleneck_tensor, bottleneck_tensor_size, NUM_CLASSES)
+	logits = last_layers(bottleneck_tensor, bottleneck_tensor_size, num_classes)
 
-	y = tf.placeholder(tf.float32, [None, NUM_CLASSES], name='output')   # Placeholder for labels.
+	y = tf.placeholder(tf.float32, [None, num_classes], name='output')   # Placeholder for labels.
 
 	# for train for classification:
 	loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=y)
@@ -454,4 +458,4 @@ if __name__ == '__main__':
 
 	dataset = make_tf_dataset(filenames_data)
 
-	train_and_save_model(dataset, shape=SHAPE)
+	train_and_save_model(dataset, shape=SHAPE, num_classes=filenames_data['num_classes'])

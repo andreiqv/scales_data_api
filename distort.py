@@ -7,9 +7,12 @@ def augment_dataset(dataset, mult=1):
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
 	dataset = dataset.shuffle(3000).repeat(mult)
 
+	params = {'hue':0.005, 'brightness':0.1, 'contrast':(0.8,1.2), 'saturation':(0.8,1.2) }
+
+
 	def _random_distord(images, labels):
 
-		images = tf.image.random_flip_left_right(images)
+		images = tf.image.random_flip_left_right(images)		
 
 		#images = tf.image.random_hue(images, max_delta=0.05)
 		#images = tf.image.random_contrast(images, lower=0.3, upper=1.8)
@@ -21,10 +24,10 @@ def augment_dataset(dataset, mult=1):
 		#images = tf.image.random_brightness(images, max_delta=0.2)
 		#images = tf.image.random_saturation(images, lower=0.5, upper=1.5)
 
-		images = tf.image.random_hue(images, max_delta=0.005)
-		images = tf.image.random_contrast(images, lower=0.8, upper=1.2)
-		images = tf.image.random_brightness(images, max_delta=0.1)
-		images = tf.image.random_saturation(images, lower=0.8, upper=1.2)
+		images = tf.image.random_hue(images, max_delta=params['hue'])
+		images = tf.image.random_brightness(images, max_delta=params['brightness'])
+		images = tf.image.random_contrast(images, lower=params['contrast'][0], upper=params['contrast'][1])
+		images = tf.image.random_saturation(images, lower=params['saturation'][0], upper=params['saturation'][1])
 
 		images = tf.minimum(images, 1.0)
 		images = tf.maximum(images, 0.0)		
