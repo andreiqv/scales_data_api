@@ -21,7 +21,7 @@ def augment_dataset(dataset, mult=1):
 		#images = tf.image.random_brightness(images, max_delta=0.2)
 		#images = tf.image.random_saturation(images, lower=0.5, upper=1.5)
 
-		images = tf.image.random_hue(images, max_delta=0.01)
+		images = tf.image.random_hue(images, max_delta=0.005)
 		images = tf.image.random_contrast(images, lower=0.8, upper=1.2)
 		images = tf.image.random_brightness(images, max_delta=0.1)
 		images = tf.image.random_saturation(images, lower=0.8, upper=1.2)
