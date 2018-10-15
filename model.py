@@ -27,7 +27,10 @@ else:
 	type_model = 'feature_vector'
 	#type_model = 'classification'
 	
-	if model_number == 1:		
+	if model_number == 0:		
+		module = networks.conv_network_224
+		SHAPE = 224, 224, 3	
+	elif model_number == 1:		
 		module = hub.Module("https://tfhub.dev/google/imagenet/resnet_v2_152/{0}/1".format(type_model))
 		SHAPE = 224, 224, 3
 	elif model_number == 2:
@@ -45,4 +48,4 @@ else:
 	BATCH_SIZE = 32
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
 	DISPLAY_INTERVAL = 1000 
-	NUM_ITERS = 1000*2000
+	NUM_ITERS = 1000*1000
