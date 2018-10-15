@@ -290,7 +290,8 @@ def train_and_save_model(dataset, shape, num_classes):
 	# num_features = 2048, height x width = 224 x 224 pixels
 	assert height, width == hub.get_expected_image_size(module)	
 		
-	if use_hub:
+	#if use_hub:
+	if False:
 		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/feature_vector/1", 
 			trainable=True)
 			#trainable=False)
