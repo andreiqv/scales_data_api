@@ -235,7 +235,7 @@ if __name__ == '__main__':
 			sess.run(init)	# Randomly initialize weights.
 
 			if arguments.restore:
-				tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
+				tf.train.Saver().restore(sess, './saved_model/{0}'.format(CHECKPOINT_NAME))
 
 			#print('is_train=', is_train.eval())
 
@@ -274,7 +274,7 @@ if __name__ == '__main__':
 
 					if epoch % 200 == 0:	
 						saver = tf.train.Saver()		
-						saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
+						saver.save(sess, './saved_model/{0}'.format(CHECKPOINT_NAME))
 				
 				a1 = iteration*BATCH_SIZE % train['size']
 				a2 = (iteration + 1)*BATCH_SIZE % train['size']

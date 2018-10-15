@@ -35,6 +35,8 @@ last_layers = networks.network01  # no sigmoid
 DO_MIX = False
 NUM_CLASSES = 0
 CHECKPOINT_NAME = 'full_model'
+PB_FILE_NAME = 'saved_model_full.pb'
+OUTPUT_NODE = 'softmax'
 
 np.set_printoptions(precision=4, suppress=True)
 
@@ -308,8 +310,10 @@ def train_and_save_model(dataset, shape, num_classes):
 	print('NUM_CLASSES =', num_classes)
 
 	logits = last_layers(bottleneck_tensor, bottleneck_tensor_size, num_classes)
+	print('logits =', logits)
+	output = tf.nn.softmax(logits, name=OUTPUT_NODE)
 
-	y = tf.placeholder(tf.float32, [None, num_classes], name='output')   # Placeholder for labels.
+	y = tf.placeholder(tf.float32, [None, num_classes], name='Placeholder-y')   # Placeholder for labels.
 
 	# for train for classification:
 	loss = tf.nn.softmax_cross_entropy_with_logits_v2(logits=logits, labels=y)
@@ -347,7 +351,9 @@ def train_and_save_model(dataset, shape, num_classes):
 					sess.run(train_op, {x: batch[0], y: batch[1]}) 
 					train_acc = accuracy.eval(feed_dict={x: batch[0], y: batch[1]})
 					#print('train batch', i)
-					print('epoch={0} i={1} train_acc={2:.4f}'.format(epoch, i, train_acc))
+
+					if i%100 == 0:
+						print('epoch={0} i={1} train_acc={2:.4f}'.format(epoch, i, train_acc))
 
 					"""
 					feature_vectors = bottleneck_tensor.eval(feed_dict={ x : batch[0] })
@@ -366,34 +372,41 @@ def train_and_save_model(dataset, shape, num_classes):
 			sess.run(valid_init_op)
 			# get each element of the validation dataset until the end is reached
 			i = 0
+			sum_valid_acc = 0
 			while True:
 				i += 1
 				try:
-					print('valid batch', i)
+					#print('valid batch', i)
 					batch = sess.run(next_element)
 					valid_acc = accuracy.eval(feed_dict={x: batch[0], y: batch[1]})
-					print('epoch={0} i={1} valid_acc={2:.4f}'.format(epoch, i, valid_acc))
-					#print('i={0} valid_acc={1:.4f}'.format(i, valid_acc))
+					sum_valid_acc += valid_acc
+
+					if i%10 == 0:
+						print('epoch={0} i={1} valid_acc={2:.4f}'.format(epoch, i, valid_acc))
+						#print('i={0} valid_acc={1:.4f}'.format(i, valid_acc))
 
 				except tf.errors.OutOfRangeError:
 					print("End of validation dataset.")
 					break
+			
+			print('average valid acc = {0}'.format(sum_valid_acc / i))
+
 
 		saver = tf.train.Saver()		
-		saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
+		saver.save(sess, './saved_model/{0}'.format(CHECKPOINT_NAME))  
 
 		# SAVE GRAPH TO PB
 		graph = sess.graph			
 		tf.graph_util.remove_training_nodes(graph.as_graph_def())
 		# tf.contrib.quantize.create_eval_graph(graph)
 		# tf.contrib.quantize.create_training_graph()
-		output_node_names = ['output']
+		output_node_names = [OUTPUT_NODE]
 		output_graph_def = tf.graph_util.convert_variables_to_constants(
 			sess, graph.as_graph_def(), output_node_names)
 		# save graph:		
 		dir_for_model = '.'
 		tf.train.write_graph(output_graph_def, dir_for_model,
-			'saved_model_full.pb', as_text=False)	
+			PB_FILE_NAME, as_text=False)	
 
 	return True	
 
