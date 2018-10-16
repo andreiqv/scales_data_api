@@ -333,7 +333,7 @@ def train_and_save_model(dataset, shape, num_classes):
 
 		sess.run(tf.global_variables_initializer())
 
-		NUM_EPOCH = 20
+		NUM_EPOCH = 100
 
 		for epoch in range(NUM_EPOCH):
 			print('\nEPOCH {0}'.format(epoch))			
@@ -405,8 +405,7 @@ def train_and_save_model(dataset, shape, num_classes):
 			sess, graph.as_graph_def(), output_node_names)
 		# save graph:		
 		dir_for_model = '.'
-		tf.train.write_graph(output_graph_def, dir_for_model,
-			PB_FILE_NAME, as_text=False)	
+		tf.train.write_graph(output_graph_def, dir_for_model, PB_FILE_NAME, as_text=False)	
 
 	return True	
 

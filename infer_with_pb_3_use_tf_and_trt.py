@@ -72,7 +72,7 @@ def inference_with_graph(image, graph_def):
 
 	with g.as_default():
 
-		tf.import_graph_def(graph_def=graph_def, 
+		(graph_def=graph_def, 
 			input_map={input_node: input_node_0},
 			return_elements=[output_node_0])
 
