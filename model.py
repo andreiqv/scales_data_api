@@ -39,7 +39,7 @@ else:
 	elif model_number == 3:
 		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/{0}/1".format(type_model))
 		SHAPE = 299, 299, 3
-
+		
 		#module = lambda : hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/{0}/1".format(type_model))
 	else:
 		raise Exception('Bad n_model')
