@@ -19,7 +19,7 @@ if not use_hub:  # for local testing
 else:
 	#data_dir = '/home/andrei/Data/Datasets/Scales/data'
 	#data_dir = '/home/andrei/Data/Datasets/Scales/separated_cropped'
-	data_dir = '/home/andrei/Data/Datasets/Scales/classifier_dataset_13102018/'
+	data_dir = '/home/andrei/Data/Datasets/Scales/classifier_dataset_13102018_no_aug/'
 
 	data_dir = data_dir.rstrip('/')
 	import tensorflow_hub as hub

@@ -64,7 +64,7 @@ def createParser ():
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-r', '--restore', dest='restore', action='store_true')
 	parser.add_argument('-ev', '--eval', dest='is_eval', action='store_true')
-	#parser.add_argument('-t', '--is_train', dest='is_train', action='store_true')
+	#parser.add_argument('-t', '--is_training', dest='is_training', action='store_true')
 	parser.add_argument('-i', '--in_file', default="dump.gz", type=str,\
 		help='input dir')
 	parser.add_argument('-k', '--k', default=1, type=int,\
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 	parser = createParser()
 	arguments = parser.parse_args(sys.argv[1:])			
 	data_file = arguments.in_file
-	is_train = not arguments.is_eval
+	is_training = not arguments.is_eval
 
 	print('data_file =', data_file)
 	f = gzip.open(data_file, 'rb')
@@ -139,7 +139,7 @@ if __name__ == '__main__':
 
 		# 1. Construct a graph representing the model.
 
-		#is_train = tf.Variable(True)
+		#is_training = tf.Variable(True)
 
 		shape = SHAPE
 		height, width, color =  shape
@@ -153,7 +153,7 @@ if __name__ == '__main__':
 	
 		bottleneck_tensor = module(resized_input_tensor)
 
-		if is_train:
+		if is_training:
 			bottleneck_tensor_stop = tf.stop_gradient(bottleneck_tensor)
 
 			bottleneck_input = tf.placeholder_with_default(
@@ -207,12 +207,12 @@ if __name__ == '__main__':
 			init = tf.global_variables_initializer()
 			sess.run(init)	# Randomly initialize weights.
 
-			if arguments.restore or (not is_train):		
+			if arguments.restore or (not is_training):		
 				single_layer_nn.restore(sess)
 				if False:
 					tf.train.Saver().restore(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
 
-			#print('is_train=', is_train.eval())
+			#print('is_training=', is_training.eval())
 
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
@@ -253,7 +253,7 @@ if __name__ == '__main__':
 							saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))
 					
 
-				if not is_train: break
+				if not is_training: break
 
 				# RUN OPTIMAIZER:
 				a1 = iteration*BATCH_SIZE % train['size']
@@ -296,14 +296,14 @@ if __name__ == '__main__':
 				saver = tf.train.Saver()		
 				saver.save(sess, './save_model/{0}'.format(CHECKPOINT_NAME))  
 
-			if is_train:
+			if is_training:
 				# save to checkpoint
 				single_layer_nn.save(sess)
 
 			else:
 				# SAVE GRAPH TO PB
 				graph = sess.graph			
-				#op = is_train.assign(False)
+				#op = is_training.assign(False)
 				#sess.run(op)
 				tf.graph_util.remove_training_nodes(graph.as_graph_def())
 				# tf.contrib.quantize.create_eval_graph(graph)
