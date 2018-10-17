@@ -28,8 +28,7 @@ import distort
 #DO_MIX = False
 DO_MIX = False
 NUM_CLASSES = 0
-DO_AUGMENTATION = True
-MULT = 5 # how many times to repeat
+DO_AUGMENTATION = True, MULT = 5 # do aug and how many times to repeat images 
 #do_augmentation = False
 
 from model import module, SHAPE, data_dir
