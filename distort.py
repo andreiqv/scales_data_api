@@ -7,7 +7,8 @@ def augment_dataset(dataset, mult=1):
 	#dataset = dataset.shuffle(60000).repeat(5).batch(16)
 	dataset = dataset.shuffle(3000).repeat(mult)
 
-	delta = {'hue':0.005, 'brightness':0.1, 'contrast':(0.8,1.2), 'saturation':(0.8,1.2)}
+	#delta = {'hue':0.005, 'brightness':0.1, 'contrast':(0.8,1.2), 'saturation':(0.8,1.2)}
+	delta = {'hue':0.01, 'brightness':0.1, 'contrast':(0.8,1.2), 'saturation':(0.8,1.2)}
 
 	def _random_distord(images, labels):
 
