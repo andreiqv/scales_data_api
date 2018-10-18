@@ -33,6 +33,7 @@ MULT = 5 #  how many times to repeat images
 #do_augmentation = False
 
 from model import module, SHAPE, data_dir
+from timer import timer
 np.set_printoptions(precision=4, suppress=True)
 
 #---------------------------------
@@ -114,7 +115,6 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	save_labels_to_file(map_label_id)  # create file labels.txt
 
-
 	for class_id in class_id_set:
 
 		subdir = src_dir + '/' + str(class_id)
@@ -127,8 +127,6 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			base = os.path.splitext(filename)[0]
 			ext = os.path.splitext(filename)[1]
 			if not ext in {'.jpg', ".png"} : continue
-
-			# ????
 			#if base.split('_')[-1] != '0p': continue # use only _0p.jpg files
 
 			class_index = map_id_label[class_id]
@@ -138,13 +136,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 			#label[class_index] = 1
 
 			file_path = subdir + '/' + filename
-				
-			#im = Image.open(file_path)		
-			#im = im.resize(image_size, Image.ANTIALIAS)
-			#arr = np.array(im, dtype=np.float32) / 256				
-			#feature_vector = bottleneck_tensor.eval(feed_dict={ x : [arr] })			
-			#feature_vectors.append(feature_vector)
-			
+
 			feature_vectors.append(0) # not used
 			filenames.append(file_path) # filename or file_path
 			labels.append(label)
@@ -185,6 +177,9 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	data['id_label'] = map_id_label
 	data['label_id'] = map_label_id
 	data['num_classes'] = num_classes
+
+	#if ratio[2]==0:
+		#data['test'] = data['valid']
 
 	return data
 
@@ -237,6 +232,10 @@ def make_tf_dataset(filenames_data):
 	print('Train labels:', filenames_data['train']['labels'])
 	print('Valid labels:', filenames_data['valid']['labels'])
 
+	if len(filenames_data['test']['labels']) == 0:
+		filenames_data['test'] = filenames_data['valid']
+		# overwise it won't work.
+		# but further test dataset will not be used.
 
 	# 
 	#print(filenames_data['train']['filenames'])
@@ -431,9 +430,11 @@ if __name__ == '__main__':
 		dst_file = 'dump.gz'
 
 	filenames_data = make_filenames_list_from_subdir(
-		src_dir=src_dir, shape=SHAPE, ratio=[9,1,1])
+		src_dir=src_dir, shape=SHAPE, ratio=[9,1,0])
 
 	dataset = make_tf_dataset(filenames_data)
+
+	timer('make_bottleneck')
 
 	bottleneck_data = make_bottleneck_with_tf(dataset, shape=SHAPE)
 
@@ -445,4 +446,7 @@ if __name__ == '__main__':
 	print('Valid size:', len(bottleneck_data['valid']['images']))
 	print('Test size:', len(bottleneck_data['test']['images']))
 
+	timer('save dump')
 	save_data_dump(bottleneck_data, dst_file=dst_file)
+	
+	timer()

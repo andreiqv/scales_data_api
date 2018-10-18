@@ -40,6 +40,7 @@ OUTPUT_NODE = 'softmax'
 #NUM_CLASSES = 412
 
 from model import *
+from timer import timer
 
 """
 if os.path.exists('.notebook'):
@@ -239,6 +240,8 @@ if __name__ == '__main__':
 
 			#print('is_train=', is_train.eval())
 
+			timer('TRAINING')
+
 			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
 
 				if iteration % DISPLAY_INTERVAL == 0:
@@ -329,6 +332,8 @@ if __name__ == '__main__':
 			dir_for_model = '.'
 			tf.train.write_graph(output_graph_def, dir_for_model,
 				PB_FILE_NAME, as_text=False)	
+
+			timer()
 
 			# it doesn't work. I don't know why.
 			#graph_file_name = 'saved_model_gf.pb'			
