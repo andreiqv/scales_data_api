@@ -268,7 +268,7 @@ def make_tf_dataset(filenames_data):
 		#train_data = distort.augment_dataset(train_data)
 		train_data = distort.augment_dataset(train_data, mult=MULT)
 
-	batch_size = 16
+	batch_size = 64
 	train_data = train_data.batch(batch_size)
 	valid_data = valid_data.batch(batch_size)
 	test_data  = test_data.batch(batch_size)
