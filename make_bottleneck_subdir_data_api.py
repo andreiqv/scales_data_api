@@ -32,7 +32,7 @@ DO_AUGMENTATION = True
 MULT = 5 #  how many times to repeat images 
 #do_augmentation = False
 
-from model import module, SHAPE, data_dir
+from model import module, SHAPE, DATASET_DIR
 from timer import timer
 np.set_printoptions(precision=4, suppress=True)
 
@@ -386,6 +386,28 @@ def make_bottleneck_with_tf(dataset, shape):
 #------------------------------------------------
 
 
+def make_bottleneck_data(src_dir, shape, ratio):
+
+	filenames_data = make_filenames_list_from_subdir(
+		src_dir=src_dir, shape=shape, ratio=ratio)
+
+	dataset = make_tf_dataset(filenames_data)
+
+	timer('make_bottleneck')
+
+	bottleneck_data = make_bottleneck_with_tf(dataset, shape=SHAPE)
+
+	bottleneck_data['id_label'] = filenames_data['id_label']
+	bottleneck_data['label_id'] = filenames_data['label_id']
+	bottleneck_data['num_classes'] = filenames_data['num_classes']
+
+	print('Train size:', len(bottleneck_data['train']['images']))
+	print('Valid size:', len(bottleneck_data['valid']['images']))
+	print('Test size:', len(bottleneck_data['test']['images']))	
+
+	return bottleneck_data
+
+
 def save_data_dump(data, dst_file):
 	
 	# save the data on a disk
@@ -410,8 +432,6 @@ def createParser ():
 		help='output file')
 	parser.add_argument('-m', '--mix', dest='mix', action='store_true')
 
-	parser.add_argument('-n', '--num', default=100, type=int,\
-		help='num_angles for a single picture')
 	return parser
 
 
@@ -419,32 +439,15 @@ if __name__ == '__main__':
 
 	parser = createParser()
 	arguments = parser.parse_args(sys.argv[1:])			
-	NUM_ANGLES 	 = arguments.num
 	#DO_MIX 		 = arguments.mix
-	print('NUM_ANGLES =', 	NUM_ANGLES)
 	#print('DO_MIX =',		DO_MIX)
 
 	if not arguments.src_dir:
-		src_dir = data_dir
+		src_dir = DATASET_DIR
 	if not arguments.dst_file:		
 		dst_file = 'dump.gz'
 
-	filenames_data = make_filenames_list_from_subdir(
-		src_dir=src_dir, shape=SHAPE, ratio=[9,1,0])
-
-	dataset = make_tf_dataset(filenames_data)
-
-	timer('make_bottleneck')
-
-	bottleneck_data = make_bottleneck_with_tf(dataset, shape=SHAPE)
-
-	bottleneck_data['id_label'] = filenames_data['id_label']
-	bottleneck_data['label_id'] = filenames_data['label_id']
-	bottleneck_data['num_classes'] = filenames_data['num_classes']
-
-	print('Train size:', len(bottleneck_data['train']['images']))
-	print('Valid size:', len(bottleneck_data['valid']['images']))
-	print('Test size:', len(bottleneck_data['test']['images']))
+	bottleneck_data = make_bottleneck_data(src_dir=src_dir, shape=SHAPE, ratio=[9,1,0])
 
 	timer('save dump')
 	save_data_dump(bottleneck_data, dst_file=dst_file)

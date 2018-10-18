@@ -99,13 +99,20 @@ if __name__ == '__main__':
 	#data_1 = load_data(in_dir, img_size=(540,540))
 	#data = split_data(data1, ratio=(6,1,3))
 
-	print('data_file =', data_file)
 	print('selected network =', arguments.k)
 	if arguments.k > 1:
 		print('HIDDEN_NUM =', HIDDEN_NUM)
 
-	f = gzip.open(data_file, 'rb')
-	data = pickle.load(f)
+	LOAD_DUMP_FILE = False
+	if LOAD_DUMP_FILE:
+		print('data_file =', data_file)
+		f = gzip.open(data_file, 'rb')
+		data = pickle.load(f)
+	else:
+		from make_bottleneck_subdir_data_api import make_bottleneck_data
+		from model import SHAPE, DATASET_DIR
+		data = make_bottleneck_data(src_dir=DATASET_DIR, shape=SHAPE, ratio=[9,1,0])
+
 	train = data['train']
 	valid = data['valid']
 	test  = data['test']

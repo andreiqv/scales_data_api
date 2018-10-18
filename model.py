@@ -8,6 +8,7 @@ use_hub = os.path.exists('.use_hub')
 if not use_hub:  # for local testing
 	#data_dir = '../data'
 	data_dir = '../separated'
+	DATASET_DIR = data_dir
 
 	module = networks.conv_network_224
 	SHAPE = 224, 224, 3
@@ -20,8 +21,9 @@ else:
 	#data_dir = '/home/andrei/Data/Datasets/Scales/data'
 	#data_dir = '/home/andrei/Data/Datasets/Scales/separated_cropped'
 	data_dir = '/home/andrei/Data/Datasets/Scales/classifier_dataset_181018'
-
 	data_dir = data_dir.rstrip('/')
+	DATASET_DIR = data_dir
+	
 	import tensorflow_hub as hub
 	model_number = 3
 	type_model = 'feature_vector'
