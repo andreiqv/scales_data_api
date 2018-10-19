@@ -29,7 +29,7 @@ import distort
 DO_MIX = False
 NUM_CLASSES = 0
 DO_AUGMENTATION = True
-MULT = 5 #  how many times to repeat images 
+MULT = 2 #  how many times to repeat images 
 #do_augmentation = False
 
 from model import module, SHAPE, DATASET_DIR, DO_SMALL_TRAIN_CATEGORIES_EXPANSION
