@@ -3,26 +3,15 @@
 import os.path
 import networks
 
-use_hub = os.path.exists('.use_hub')
+use_hub = not os.path.exists('.dont_use_hub')
+USE_HUB = use_hub
 
-if not use_hub:  # for local testing
-	#data_dir = '../data'
-	data_dir = '../separated'
-	DATASET_DIR = data_dir
-
-	module = networks.conv_network_224
-	SHAPE = 224, 224, 3
-
-	bottleneck_tensor_size =  588 #1536
-	BATCH_SIZE = 4
-	DISPLAY_INTERVAL, NUM_ITERS = 10, 100
-
-else:
+if use_hub:
 	#data_dir = '/home/andrei/Data/Datasets/Scales/data'
 	#data_dir = '/home/andrei/Data/Datasets/Scales/separated_cropped'
 	data_dir = '/home/andrei/Data/Datasets/Scales/classifier_dataset_181018'
 	data_dir = data_dir.rstrip('/')
-	DATASET_DIR = data_dir
+	DATASET_DIR = data_dir	
 	
 	import tensorflow_hub as hub
 	model_number = 3
@@ -52,4 +41,22 @@ else:
 	BATCH_SIZE = 32
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
 	DISPLAY_INTERVAL = 1000 
-	NUM_ITERS = 1000*1000
+	NUM_ITERS = 1000*500
+
+	DO_SMALL_TRAIN_CATEGORIES_EXPANSION = True
+
+
+#------------------------------------------
+else:  # for local testing without tf.hub
+	#data_dir = '../data'
+	data_dir = '../separated'
+	DATASET_DIR = data_dir
+
+	module = networks.conv_network_224
+	SHAPE = 224, 224, 3
+
+	bottleneck_tensor_size =  588 #1536
+	BATCH_SIZE = 4
+	DISPLAY_INTERVAL, NUM_ITERS = 10, 100	
+
+	DO_SMALL_TRAIN_CATEGORIES_EXPANSION = True

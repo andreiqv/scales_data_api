@@ -71,6 +71,9 @@ def createParser ():
 	parser.add_argument('-hn', '--hidden_num', default=8, type=int,\
 		help='number of neurons in hiden layer')
 
+	parser.add_argument('-dud', '--dont_use_dump', dest='dont_use_dump', 
+		action='store_true', help='Create bottleneck data from origin dataset directory')
+
 	return parser
 
 
@@ -103,7 +106,9 @@ if __name__ == '__main__':
 	if arguments.k > 1:
 		print('HIDDEN_NUM =', HIDDEN_NUM)
 
-	LOAD_DUMP_FILE = False
+
+	# Use ready dump file with bottlenecks or bottleneck data from origin dataset directory
+	LOAD_DUMP_FILE = not arguments.dont_use_dump
 	if LOAD_DUMP_FILE:
 		print('data_file =', data_file)
 		f = gzip.open(data_file, 'rb')
@@ -133,10 +138,10 @@ if __name__ == '__main__':
 	print('valid size:', len(valid['labels']))
 	print('test size:', len(test['labels']))
 	print('Data was loaded.')
-	print('Example of data:', train_data[0])
+	#print('Example of data:', train_data[0])
 	print('size of vector:', len(train_data[0]))
-	print('Example of label:',train_labels[0])
-	print('size of vector:', len(train_labels[0]))
+	#print('Example of label:',train_labels[0])
+	print('size of label:', len(train_labels[0]))
 	#sys.exit()
 
 	#train_data = [np.transpose(t) for t in train_data]

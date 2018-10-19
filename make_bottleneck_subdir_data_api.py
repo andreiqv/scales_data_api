@@ -32,7 +32,7 @@ DO_AUGMENTATION = True
 MULT = 5 #  how many times to repeat images 
 #do_augmentation = False
 
-from model import module, SHAPE, DATASET_DIR
+from model import module, SHAPE, DATASET_DIR, DO_SMALL_TRAIN_CATEGORIES_EXPANSION
 from timer import timer
 np.set_printoptions(precision=4, suppress=True)
 
@@ -161,7 +161,9 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 		data['filenames'] = [x[2] for x in zip3]
 
 	print('Split data')
-	data = split_data.split_data_v3(data, ratio=ratio)
+	#data = split_data.split_data_v3(data, ratio=ratio)
+	data = split_data.split_data_v4(data, ratio=ratio,
+		do_small_train_categories_expansion=DO_SMALL_TRAIN_CATEGORIES_EXPANSION)
 
 	assert type(data['train']['labels'][0]) is int
 	assert type(data['train']['filenames'][0]) is str
