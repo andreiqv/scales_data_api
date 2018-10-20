@@ -6,6 +6,9 @@ import networks
 use_hub = not os.path.exists('.dont_use_hub')
 USE_HUB = use_hub
 
+DO_SMALL_TRAIN_CATEGORIES_EXPANSION = False
+
+
 if use_hub:
 	#data_dir = '/home/andrei/Data/Datasets/Scales/data'
 	#data_dir = '/home/andrei/Data/Datasets/Scales/separated_cropped'
@@ -41,9 +44,7 @@ if use_hub:
 	BATCH_SIZE = 32
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
 	DISPLAY_INTERVAL = 1000 
-	NUM_ITERS = 1000*500
-
-	DO_SMALL_TRAIN_CATEGORIES_EXPANSION = True
+	NUM_ITERS = 1000*500	
 
 
 #------------------------------------------
@@ -59,4 +60,4 @@ else:  # for local testing without tf.hub
 	BATCH_SIZE = 4
 	DISPLAY_INTERVAL, NUM_ITERS = 10, 100	
 
-	DO_SMALL_TRAIN_CATEGORIES_EXPANSION = True
+	
