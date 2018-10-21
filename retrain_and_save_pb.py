@@ -71,6 +71,9 @@ def createParser ():
 	parser.add_argument('-hn', '--hidden_num', default=8, type=int,\
 		help='number of neurons in hiden layer')
 
+	parser.add_argument('-ni', '--num_iters', default=None, type=int,\
+		help='Set number of iterations')
+
 	parser.add_argument('-dud', '--dont_use_dump', dest='dont_use_dump', 
 		action='store_true', help='Create bottleneck data from origin dataset directory')
 
@@ -98,6 +101,11 @@ if __name__ == '__main__':
 
 	if arguments.hidden_num > 0:
 		HIDDEN_NUM = arguments.hidden_num
+
+	if arguments.num_iters:	
+		num_iters = arguments.num_iters
+	else:
+		num_iters = NUM_ITERS	# from settings file
 
 	#data_1 = load_data(in_dir, img_size=(540,540))
 	#data = split_data(data1, ratio=(6,1,3))
@@ -254,7 +262,7 @@ if __name__ == '__main__':
 
 			timer('TRAINING')
 
-			for iteration in range(NUM_ITERS):			  # Train iteratively for NUM_iterationS.		 
+			for iteration in range(num_iters):			  # Train iteratively for NUM_iterationS.		 
 
 				if iteration % DISPLAY_INTERVAL == 0:
 
