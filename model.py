@@ -23,23 +23,26 @@ if use_hub:
 	
 	if model_number == 0:		
 		module = networks.conv_network_224
+		bottleneck_tensor_size =  1536
 		SHAPE = 224, 224, 3	
 	elif model_number == 1:		
 		module = hub.Module("https://tfhub.dev/google/imagenet/resnet_v2_152/{0}/1".format(type_model))
+		bottleneck_tensor_size =  1536
 		SHAPE = 224, 224, 3
 	elif model_number == 2:
 		module = hub.Module("https://tfhub.dev/google/imagenet/inception_v3/{0}/1".format(type_model))
+		bottleneck_tensor_size =  1536
 		SHAPE = 299, 299, 3
 	elif model_number == 3:
 		module = hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/{0}/1".format(type_model))
+		bottleneck_tensor_size =  1536
 		SHAPE = 299, 299, 3
 		
 		#module = lambda : hub.Module("https://tfhub.dev/google/imagenet/inception_resnet_v2/{0}/1".format(type_model))
 	else:
 		raise Exception('Bad n_model')
 		# https://tfhub.dev/google/imagenet/resnet_v2_152/feature_vector/1
-
-	bottleneck_tensor_size =  1536
+	
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 32
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
@@ -54,9 +57,9 @@ else:  # for local testing without tf.hub
 	DATASET_DIR = data_dir
 
 	module = networks.conv_network_224
-	SHAPE = 224, 224, 3
-
 	bottleneck_tensor_size =  588 #1536
+	SHAPE = 224, 224, 3
+	
 	BATCH_SIZE = 4
 	DISPLAY_INTERVAL, NUM_ITERS = 10, 100	
 
