@@ -49,8 +49,10 @@ def split_data_v5(data, ratio, do_balancing=False):
 		print('Label {0}: {1} images [{2} {3} {4}]'.format(label, len_data, len_train, len_valid, len_test))
 		print(szip['train'][-1])
 
-	#random.shuffle(szip['train'])
 	# shuffle
+	random.shuffle(szip['train'])
+	random.shuffle(szip['valid'])
+
 	"""
 	randomize = np.arange(len(szip['train']))
 	np.random.shuffle(randomize)
@@ -60,7 +62,7 @@ def split_data_v5(data, ratio, do_balancing=False):
 	np.random.shuffle(randomize)
 	szip['valid'] = szip['valid'][randomize]
 	"""
-	
+
 	# divided on separeted lists: labels, images, filenames.
 	sdata = {'train': dict(), 'valid': dict(), 'test': dict()} # splitted dataset
 
