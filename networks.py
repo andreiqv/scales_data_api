@@ -26,7 +26,10 @@ HIDDEN_NUM_DEFAULT = 8
 
 def network01(input_tensor, input_size, output_size):
 
-	input_tensor = tf.layers.dropout(inputs=input_tensor, rate=0.4)
+	if False:
+		droupout_rate = 0.2
+		input_tensor = tf.layers.dropout(inputs=input_tensor, rate=droupout_rate)
+		print('Dropout with rate {} is used'.format(droupout_rate))
 
 	f1 = fullyConnectedLayer(
 		input_tensor, input_size=input_size, num_neurons=output_size, func=None)
