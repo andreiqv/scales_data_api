@@ -1,5 +1,5 @@
 import random
-
+import sys
 
 
 def split_data_v5(data, ratio, do_balancing=False):
@@ -20,8 +20,8 @@ def split_data_v5(data, ratio, do_balancing=False):
 	for label in labels:
 		category[label] = [z for z in zip3 if z[0] == label]
 		category[label].sort(key = lambda z : z[2])
-		for i in category[label]:
-			print('{}: {}'.format(category[label][0], category[label][2]))
+		for item in category[label]:
+			print('{0}: {1}'.format(item[0], item[2]))
 
 	sys.exit(0)		
 
