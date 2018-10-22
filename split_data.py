@@ -23,7 +23,7 @@ def split_data_v5(data, ratio, do_balancing=False):
 		for item in category[label]:
 			print('{0}: {1}'.format(item[0], item[2]))
 
-	sys.exit(0)		
+	#sys.exit(0)		
 
 	szip = {'train': [], 'valid': [], 'test': []}	# splitted zip
 
