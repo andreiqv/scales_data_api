@@ -31,7 +31,7 @@ def network01(input_tensor, input_size, output_size):
 		input_tensor = tf.layers.dropout(inputs=input_tensor, rate=droupout_rate)
 		print('Dropout with rate {} is used'.format(droupout_rate))
 
-	if True:
+	if False:
 		input_tensor = tf.layers.batch_normalization(input_tensor, training=True)
 		print('Batch normalization will be used.')
 
