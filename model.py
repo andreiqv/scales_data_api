@@ -6,7 +6,7 @@ import networks
 use_hub = not os.path.exists('.dont_use_hub')
 USE_HUB = use_hub
 
-DO_SMALL_TRAIN_CATEGORIES_EXPANSION = False
+DO_BALANCING = False
 
 
 if use_hub:
