@@ -32,7 +32,7 @@ def network01(input_tensor, input_size, output_size):
 		print('Dropout with rate {} is used'.format(droupout_rate))
 
 	if True:
-		input_tensor = tf.layers.batch_normalization(input_tensor, training=training)
+		input_tensor = tf.layers.batch_normalization(input_tensor, training=True)
 		print('Batch normalization will be used.')
 
 	f1 = fullyConnectedLayer(
