@@ -33,7 +33,7 @@ from layers import *
 import networks
 
 HIDDEN_NUM = 8
-CHECKPOINT_NAME = 'my_test_model'
+CHECKPOINT_NAME = 'my_test_model_2'
 PB_FILE_NAME = 'saved_model.pb'
 OUTPUT_NODE = 'softmax'
 
