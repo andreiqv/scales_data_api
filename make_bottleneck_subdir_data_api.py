@@ -32,7 +32,7 @@ DO_AUGMENTATION = True
 MULT = 2 #  how many times to repeat images 
 #do_augmentation = False
 
-from model import module, SHAPE, DATASET_DIR, DO_SMALL_TRAIN_CATEGORIES_EXPANSION
+from model import module, SHAPE, DATASET_DIR, DO_BALANCING
 from timer import timer
 np.set_printoptions(precision=4, suppress=True)
 
@@ -163,7 +163,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 	print('Split data')
 	#data = split_data.split_data_v3(data, ratio=ratio)
 	data = split_data.split_data_v5(data, ratio=ratio,
-		do_balancing=DO_SMALL_TRAIN_CATEGORIES_EXPANSION)
+		do_balancing=DO_BALANCING)
 
 	assert type(data['train']['labels'][0]) is int
 	assert type(data['train']['filenames'][0]) is str
