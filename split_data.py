@@ -1,6 +1,6 @@
 import random
 import sys
-
+import numpy as np
 
 def split_data_v5(data, ratio, do_balancing=False):
 	""" ver-5:
@@ -51,6 +51,7 @@ def split_data_v5(data, ratio, do_balancing=False):
 
 	#random.shuffle(szip['train'])
 	# shuffle
+	"""
 	randomize = np.arange(len(szip['train']))
 	np.random.shuffle(randomize)
 	szip['train'] = szip['train'][randomize]
@@ -58,7 +59,8 @@ def split_data_v5(data, ratio, do_balancing=False):
 	randomize = np.arange(len(szip['valid']))
 	np.random.shuffle(randomize)
 	szip['valid'] = szip['valid'][randomize]
-
+	"""
+	
 	# divided on separeted lists: labels, images, filenames.
 	sdata = {'train': dict(), 'valid': dict(), 'test': dict()} # splitted dataset
 
