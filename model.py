@@ -46,8 +46,9 @@ if use_hub:
 	#bottleneck_tensor_size =  1001
 	BATCH_SIZE = 32
 	#DISPLAY_INTERVAL, NUM_ITERS = 1000, 1000*1500
+	LEARNING_RATE = 0.01
 	DISPLAY_INTERVAL = 1000 
-	NUM_ITERS = 1000*500	
+	NUM_ITERS = 1000*500
 
 
 #------------------------------------------
@@ -61,6 +62,7 @@ else:  # for local testing without tf.hub
 	SHAPE = 224, 224, 3
 	
 	BATCH_SIZE = 4
-	DISPLAY_INTERVAL, NUM_ITERS = 10, 100	
+	LEARNING_RATE = 0.01
+	DISPLAY_INTERVAL, NUM_ITERS = 10, 100
 
 	
