@@ -162,7 +162,7 @@ def make_filenames_list_from_subdir(src_dir, shape, ratio):
 
 	print('Split data')
 	#data = split_data.split_data_v3(data, ratio=ratio)
-	data = split_data.split_data_v4(data, ratio=ratio,
+	data = split_data.split_data_v5(data, ratio=ratio,
 		do_small_train_categories_expansion=DO_SMALL_TRAIN_CATEGORIES_EXPANSION)
 
 	assert type(data['train']['labels'][0]) is int
