@@ -48,18 +48,22 @@ def network02_CNN(input_tensor, input_size, output_size):
 
 	x = tf.reshape(input_tensor, [-1,48,32,1])
 	input_mult = 1
-	x = convPoolLayer(x, kernel=(4,4), pool_size=2, num_in=1, num_out=4, 
-		func=tf.nn.relu, name='1')  # 24 x 32 x 4 * input_mult
-	#input_size = input_mult * input_size
+	print('x.shape = ', x.shape)
+	x = convPoolLayer(x, kernel=(4,4), pool_size=2, num_in=1, num_out=4*input_mult, 
+		func=tf.nn.relu, name='1')  # 24 x 16 x 4 * input_mult
+	print('x.shape = ', x.shape)
+	input_size = input_mult * input_size
 	x = tf.reshape(x, [-1, input_size])
+	print('x.shape = ', x.shape)
+	print('input_size = ', input_size)
 
 	if False:
 		droupout_rate = 0.2
 		input_tensor = tf.layers.dropout(inputs=input_tensor, rate=droupout_rate)
 		print('Dropout with rate {} is used'.format(droupout_rate))
 
-	x = fullyConnectedLayer(
-		input_tensor, input_size=input_size, num_neurons=output_size, func=None)
+	x = fullyConnectedLayer(x, input_size=input_size, num_neurons=output_size, 
+							func=None)
 
 	# x = tf.layers.batch_normalization(x, training=True)  # doesn't work well
 		
