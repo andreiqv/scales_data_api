@@ -37,6 +37,8 @@ CHECKPOINT_NAME = 'my_test_model_2'
 PB_FILE_NAME = 'saved_model.pb'
 OUTPUT_NODE = 'softmax'
 
+last_layers = networks.network02_CNN
+
 #NUM_CLASSES = 412
 
 from model import *
@@ -66,7 +68,7 @@ def createParser ():
 	parser.add_argument('-r', '--restore', dest='restore', action='store_true')
 	parser.add_argument('-i', '--in_file', default="dump.gz", type=str,\
 		help='input dir')
-	parser.add_argument('-k', '--k', default=1, type=int,\
+	parser.add_argument('-k', '--k', default=0, type=int,\
 		help='number of network')
 	parser.add_argument('-hn', '--hidden_num', default=8, type=int,\
 		help='number of neurons in hiden layer')
@@ -88,6 +90,7 @@ if __name__ == '__main__':
 	arguments = parser.parse_args(sys.argv[1:])			
 	data_file = arguments.in_file
 
+	# set network for last layers
 	if arguments.k == 1:	
 		last_layers = networks.network01
 		#output_node_names = ['output']
@@ -96,8 +99,7 @@ if __name__ == '__main__':
 	elif arguments.k == 2:	
 		last_layers = networks.network2
 		#output_node_names = ['sigmoid_out']
-	else:
-		raise Exception('Bad argument arguments.k')
+
 
 	if arguments.hidden_num > 0:
 		HIDDEN_NUM = arguments.hidden_num

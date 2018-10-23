@@ -25,6 +25,8 @@ HIDDEN_NUM_DEFAULT = 8
 # add a final layer (or a few layers)
 
 def network01(input_tensor, input_size, output_size):
+	""" Without an activation function.
+	"""
 
 	if False:
 		droupout_rate = 0.2
@@ -34,12 +36,36 @@ def network01(input_tensor, input_size, output_size):
 	x = fullyConnectedLayer(
 		input_tensor, input_size=input_size, num_neurons=output_size, func=None)
 
-	if True:
-		x = tf.layers.batch_normalization(x, training=True)
-		print('Batch normalization will be used.')
-	
+	# x = tf.layers.batch_normalization(x, training=True)  # doesn't work well
+		
 	return x
 
+# add a final layer (or a few layers)
+
+def network02_CNN(input_tensor, input_size, output_size):
+	""" Without an activation function.
+	"""
+
+	x = tf.reshape(input_tensor, [-1,48,32,1])
+	convPoolLayer(x, kernel=(4,4), pool_size=2, num_in=1, num_out=4, 
+		func=tf.nn.relu, name='1')  # 24 x 32 x 4
+	input_size = input_size
+	x = tf.reshape(x, [-1, input_size])
+
+	if False:
+		droupout_rate = 0.2
+		input_tensor = tf.layers.dropout(inputs=input_tensor, rate=droupout_rate)
+		print('Dropout with rate {} is used'.format(droupout_rate))
+
+	x = fullyConnectedLayer(
+		input_tensor, input_size=input_size, num_neurons=output_size, func=None)
+
+	# x = tf.layers.batch_normalization(x, training=True)  # doesn't work well
+		
+	return x	
+
+
+# Single layer networks with activation functions
 
 def network1(input_tensor, input_size, output_size):
 
