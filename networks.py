@@ -53,9 +53,6 @@ def network02_CNN(input_tensor, input_size, output_size):
 	input_size = input_mult * input_size
 	x = tf.reshape(x, [-1, input_size])
 
-	print('****')
-	sys.exit(0)
-
 	if False:
 		droupout_rate = 0.2
 		input_tensor = tf.layers.dropout(inputs=input_tensor, rate=droupout_rate)
