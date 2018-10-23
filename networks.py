@@ -47,10 +47,14 @@ def network02_CNN(input_tensor, input_size, output_size):
 	"""
 
 	x = tf.reshape(input_tensor, [-1,48,32,1])
-	convPoolLayer(x, kernel=(4,4), pool_size=2, num_in=1, num_out=4, 
+	input_mult = 10
+	convPoolLayer(x, kernel=(4,4), pool_size=2, num_in=1, num_out=4*input_mult, 
 		func=tf.nn.relu, name='1')  # 24 x 32 x 4
-	input_size = input_size
+	input_size = input_mult * input_size
 	x = tf.reshape(x, [-1, input_size])
+
+	print('****')
+	sys.exit(0)
 
 	if False:
 		droupout_rate = 0.2
